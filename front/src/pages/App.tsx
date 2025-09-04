@@ -8,6 +8,7 @@ import { useLocation } from 'react-router';
 import i18n from 'i18next';
 import Text from '../components/withTooltip/Text';
 import { useTranslation } from 'react-i18next';
+import ClientPage from './Client';
 
 /**
  * Названия тем
@@ -28,7 +29,7 @@ export enum LanguageName {
 function setBodyColorByTheme(theme: ThemeName) {
   if (theme === 'gpnDark') {
     document.body.style.backgroundColor = '#121212';
-  } else {
+  } else{
     document.body.style.backgroundColor = '#edeef0';
   }
 }
@@ -47,7 +48,8 @@ function getPreset(themeName: ThemeName): ThemePreset {
 }
 
 const App: React.FC = () => {
-  const { t } = useTranslation();;
+  const { t } = useTranslation();
+  ;
 
   const browserLanguage = navigator.language.startsWith('ru') ? LanguageName.ru : LanguageName.en;
   const browserTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -55,38 +57,21 @@ const App: React.FC = () => {
     : ThemeName.gpnDefault;
   const location = useLocation();
 
-  const [theme, setTheme] = useState<ThemeName>(browserTheme);
-  const [language, setLanguage] = useState<LanguageName>(browserLanguage);
+  // const [theme, setTheme] = useState<ThemeName>(browserTheme);
+  // const [language, setLanguage] = useState<LanguageName>(browserLanguage);
 
-  const [ignoreRotateModal, setIgnoreRotateModal] = useState(false);
+  // useEffect(() => {
+  //   const theme = localStorage.getItem('theme');
+  //
+  //   theme && setTheme(theme as ThemeName);
+  // }, []);
 
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const theme = localStorage.getItem('theme');
-
-    theme && setTheme(theme as ThemeName);
-  }, []);
-
-  useEffect(() => {
-    const language = localStorage.getItem('language');
-
-    language && i18n.changeLanguage(language as LanguageName);
-    language && setLanguage(language as LanguageName);
-  }, []);
-
-  useEffect(() => {
-    setBodyColorByTheme(theme);
-
-    const html = document.getElementById('html');
-    if (theme === ThemeName.gpnDark) {
-      html?.classList.add('dark-scrollbar');
-      html?.classList.remove('light-scrollbar');
-    } else {
-      html?.classList.add('light-scrollbar');
-      html?.classList.remove('dark-scrollbar');
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   const language = localStorage.getItem('language');
+  //
+  //   language && i18n.changeLanguage(language as LanguageName);
+  //   language && setLanguage(language as LanguageName);
+  // }, []);
 
   // Handlers
   // const handleThemeChange = ({ value }: { value: ThemeName }) => {
@@ -102,10 +87,12 @@ const App: React.FC = () => {
   // };
 
   return (
-    <Theme className={styles.theme} preset={getPreset(theme)}>
-      <Routes>
-        <Route path="/*" element={<Text size='3xl'>Hello world!</Text>} />
-      </Routes>
+    <Theme className={styles.theme} preset={getPreset(ThemeName.gpnDefault)}>
+      <div className={styles.machineScreenWrapper}>
+        <Routes>
+          <Route path='/*' element={<ClientPage />} />
+        </Routes>
+      </div>
     </Theme>
   );
 };

@@ -9,12 +9,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 
-const isDev = window.location.hostname === 'dev.ishaker.ru';
-
 const link = document.createElement('link');
 link.rel = 'icon';
 link.type = 'image/svg+xml';
-link.href = isDev ? '/favicon-dev.svg' : '/favicon-prod.svg';
+link.href = '/favicon-dev.svg';
 
 const existingFavicon = document.querySelector("link[rel*='icon']");
 if (existingFavicon) {
