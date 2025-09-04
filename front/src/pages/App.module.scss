@@ -1,98 +1,14 @@
-$appMaxWidth: 1440px;
-$iconHamburgerSize: 36px;
-$leftMenuWidth: 264px;
-
-.app {
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: stretch;
-
-  display: flex;
-
-  margin: 0 auto;
-  box-sizing: border-box;
-  max-width: $appMaxWidth;
-  height: 100dvh;
-  padding: 0 var(--space-3xl);
-
-  &.isMobile {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-
-    flex-direction: column;
-
-    padding: 0;
-  }
-}
-
-.appContent {
-  flex-direction: column;
-  align-items: stretch;
-  flex: 1;
-
-  display: flex;
-
-  padding: 0;
-  margin-left: $leftMenuWidth;
-
-  &.isMobile {
-    margin-left: 0;
-  }
-}
-
-.topMenu {
-  justify-content: space-between;
-  align-items: center;
-
-  display: flex;
-
-  margin-top: var(--space-3xl);
-  padding: 0 0 var(--space-m) 0;
-
-  background-color: var(--bg-main-body);
-
-  &.isMobile {
-    align-items: flex-end;
-
-    margin-top: 0;
-    padding: calc(var(--space-s) + 2px) var(--space-m) calc(var(--space-s) + 2px) var(--space-m);
-
-    background-color: var(--bg-main-body);
-  }
-
-  .iconHamburger {
-    width: $iconHamburgerSize;
-    height: $iconHamburgerSize;
-
-    color: var(--control-clear-typo-typo);
-
-    cursor: pointer;
-
-    &:hover {
-      border-radius: var(--control-radius-m);
-
-      background-color: var(--control-clear-bg-bg-hover);
-    }
-  }
-}
-
-.content {
-  height: 100%;
-
-  &.isMobile {
-    height: 100%;
-    margin-top: var(--space-m);
-    padding: 0 var(--space-m) var(--space-m);
-
-    background-color: var(--bg-main-body);
-  }
-}
-
 .theme {
   position: relative;
 
   height: 100%;
 
   background-color: var(--bg-main-body);
+}
+
+.machineScreenWrapper {
+  width: 100px;
+  height: 100px;
+
+  background-color: red;
 }
