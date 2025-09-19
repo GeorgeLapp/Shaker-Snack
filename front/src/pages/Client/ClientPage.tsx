@@ -1,11 +1,19 @@
 import { FC } from 'react';
 import ProductMatrix from './ProductMatrix';
+import VerticalContainer from '../../components/VerticalContainer';
+import ClientHeader from './ClientHeader';
+import styles from './ClientPage.module.scss';
 
 /**
  * Страница покупателя
  */
 const ClientPage: FC = () => {
-  return <div><ProductMatrix/></div>
-}
+  return (
+    <VerticalContainer className={styles.ClientPage} space="m">
+      <ClientHeader />
+      <ProductMatrix />
+    </VerticalContainer>
+  );
+};
 
-export default ClientPage
+export default ClientPage;

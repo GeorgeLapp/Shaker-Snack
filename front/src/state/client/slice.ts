@@ -1,5 +1,8 @@
 import { errorHandler, NotificationType } from '../handlers';
 import { createSlice, isRejected } from '@reduxjs/toolkit';
+import { getProductMatrixThunk } from './thunk';
+import { ProductMatrixUi } from '../../types/serverInterface/ProductMatrixDTO';
+import { toProductMatrixUi } from './helpers';
 
 type StateItemType<T> = {
   state: T extends [] ? T : T | null;
@@ -8,10 +11,16 @@ type StateItemType<T> = {
 };
 
 export type ClientState = {
+  productMatrix: StateItemType<ProductMatrixUi>;
   notifications: NotificationType[];
 };
 
 const initialState: ClientState = {
+  productMatrix: {
+    state: [],
+    isLoading: false,
+    isReject: false,
+  },
   notifications: [],
 };
 
@@ -33,12 +42,25 @@ export const clientSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(
-      isRejected(),
-      (state, action) => {
-        errorHandler(action)(addNotification(state));
-      },
-    );
+    // getProductMatrixThunk
+    builder.addCase(getProductMatrixThunk.pending, (state, action) => {
+      state.productMatrix.isLoading = true;
+      state.productMatrix.isReject = false;
+    });
+
+    builder.addCase(getProductMatrixThunk.rejected, (state, action) => {
+      state.productMatrix.isLoading = false;
+      state.productMatrix.isReject = true;
+    });
+
+    builder.addCase(getProductMatrixThunk.fulfilled, (state, action) => {
+      state.productMatrix.isLoading = false;
+      state.productMatrix.state = toProductMatrixUi(action.payload);
+    });
+
+    builder.addMatcher(isRejected(), (state, action) => {
+      errorHandler(action)(addNotification(state));
+    });
   },
 });
 

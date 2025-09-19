@@ -1,16 +1,63 @@
+/**
+ * Элемент матрицы продуктов
+ */
 export type ProductMatrixItem = {
+  /**
+   * id ячейки (из телеметрии)
+   */
   id: number;
+  /**
+   * Номер ячейки
+   */
   cellNumber: number;
+  /**
+   * Номер ряда
+   */
   rowNumber: number;
+  /**
+   * стоимость товара в ячейке
+   */
   price: number;
+  /**
+   * Ссылка на картинку
+   */
   imgPath: string;
+  /**
+   * Название бренда
+   */
   brandName: string;
+  /**
+   * Название продукта
+   */
   productName: string;
-  calories?: number;
-  proteins?: number;
-  fats?: number;
-  carbohydrates?: number;
+  /**
+   * Описание товара
+   */
   description?: string;
-}
+  /**
+   * Калории
+   */
+  calories?: number;
+  /**
+   * Белок
+   */
+  proteins?: number;
+  /**
+   * Жиры
+   */
+  fats?: number;
+  /**
+   * Углеводы
+   */
+  carbohydrates?: number;
+};
 
-export type ProductMatrixDTO = ProductMatrixItem[]
+/**
+ * DTO матрицы продуктов
+ */
+export type ProductMatrixDTO = ProductMatrixItem[];
+
+/**
+ * Матрица продуктов для отображения
+ */
+export type ProductMatrixUi = ProductMatrixItem[][];

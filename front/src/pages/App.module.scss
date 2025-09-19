@@ -1,14 +1,21 @@
+$screen-width: 800px;
+$screen-height: 1280px;
+
 .theme {
   position: relative;
 
   height: 100%;
 
-  background-color: var(--bg-main-body);
+
+  background-color: black;
 }
 
 .machineScreenWrapper {
-  width: 100px;
-  height: 100px;
+  margin: auto;
+  width: $screen-width;
+  height: $screen-height;
 
-  background-color: red;
+  overflow: hidden;
+
+  background-color: var(--bg-main-body)
 }

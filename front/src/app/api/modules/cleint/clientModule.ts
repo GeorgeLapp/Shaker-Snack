@@ -3,14 +3,20 @@ import { ProductMatrixDTO } from '../../../../types/serverInterface/ProductMatri
 import { getDataFromServer } from '../../../../helpers/getDataFromServer';
 import { productMatrix } from './mockData';
 import { StartSaleDTO, StartSaleRes } from '../../../../types/serverInterface/StartSaleDTO';
-import { IssueProductDTO, IssueProductRes } from '../../../../types/serverInterface/IssueProductDTO';
+import {
+  IssueProductDTO,
+  IssueProductRes,
+} from '../../../../types/serverInterface/IssueProductDTO';
 
 /**
  * api клиентской части приложения
  */
 export class ClientModule extends AbstractApiModule {
+  /**
+   * Получение матрицы продуктов
+   */
   getProductMatrix(): Promise<ProductMatrixDTO> {
-    return getDataFromServer(productMatrix);
+    return getDataFromServer(productMatrix, 1000);
   }
 
   startSale(data: StartSaleDTO): Promise<StartSaleRes> {
