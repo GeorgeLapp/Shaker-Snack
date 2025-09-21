@@ -1,16 +1,26 @@
 $productCell-height: 182px;
 $img-height: 120px;
-$badge-height: 28px;
+$badge-height: 22px;
+$badgePrimary-height: 28px;
 
 .ProductMatrix {
+  padding: var(--space-m);
+
   .ProductRow {
     .ProductCell {
       background-color: #fff;
       height: $productCell-height;
       flex: 1;
 
+      box-sizing: border-box;
+
+      padding: calc(var(--space-2xs) - 1px);
+
+      border-radius: var(--control-radius-m);
+      border: 1px solid var(--bg-border-primary);
+
       .imgWrapper {
-        height: 120px;
+        height: $img-height;
         width: 100%;
 
         .img {
@@ -19,14 +29,17 @@ $badge-height: 28px;
         }
       }
 
-      .info {
-        .badge {
-          height: $badge-height;
-        }
+      .badge {
+        height: $badge-height;
+        width: 100%;
+        border-radius: var(--control-radius-s);
+      }
 
-        .badgeFilled {
-          background-color: var(--control-primary-bg-bg);
+      .badgeFilled {
+        height: $badgePrimary-height;
+        background-color: var(--control-primary-bg-bg);
 
+        .text {
           color: var(--control-primary-typo-typo);
         }
       }

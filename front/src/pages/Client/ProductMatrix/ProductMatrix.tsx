@@ -1,23 +1,24 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './ProductMatrix.module.scss';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
+import { useAppSelector } from '../../../app/hooks/store';
 import { selectProductMatrix } from '../../../state/client/selectors';
 import { Loader } from '@consta/uikit/Loader';
 import { Text } from '@consta/uikit/Text';
-import { getProductMatrixAction } from '../../../state/client/action';
 import HorizontalContainer from '../../../components/HorizontalContainer';
 import VerticalContainer from '../../../components/VerticalContainer';
-import { Badge } from '@consta/uikit/Badge';
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
+import ClientHeader from '../ClientHeader';
 
 const ProductMatrix: FC = () => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { state: productMatrix, isLoading, isReject } = useAppSelector(selectProductMatrix());
 
-  useEffect(() => {
-    dispatch(getProductMatrixAction());
-  }, [dispatch]);
+  // Обработчики
+  const handleProductClick = (productId: number) => () => {
+    navigate(`/product/${productId}`);
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -31,29 +32,39 @@ const ProductMatrix: FC = () => {
     return <Text size="6xl">Нет продуктов</Text>;
   }
 
-  console.log('productMatrix, ', productMatrix);
-
   return (
-    <VerticalContainer className={styles.ProductMatrix} space="xs">
-      {productMatrix.map((rowCells) => (
-        <HorizontalContainer className={styles.ProductRow} space="xs">
-          {rowCells.map(({ id, imgPath, cellNumber, price }) => (
-            <VerticalContainer key={id} className={styles.ProductCell} space="2xs" align="center">
-              <HorizontalContainer className={styles.imgWrapper} justify="center">
-                <img className={styles.img} src={imgPath} />
-              </HorizontalContainer>
-              <VerticalContainer className={styles.info} space={0}>
-                <div className={styles.badge}>
-                  <Text>{`№${cellNumber}`}</Text>
-                </div>
-                <div className={classNames(styles.badge, styles.badgeFilled)}>
-                  <Text>{`${price} ₽`}</Text>
-                </div>
+    <VerticalContainer className={styles.ProductMatrix} space="m">
+      <ClientHeader />
+      <VerticalContainer space="xs">
+        {productMatrix.map((rowCells) => (
+          <HorizontalContainer className={styles.ProductRow} space="xs">
+            {rowCells.map(({ id, imgPath, cellNumber, price }) => (
+              <VerticalContainer
+                key={id}
+                className={styles.ProductCell}
+                space="2xs"
+                align="center"
+                onClick={handleProductClick(id)}
+              >
+                <HorizontalContainer className={styles.imgWrapper} justify="center">
+                  <img className={styles.img} src={imgPath} />
+                </HorizontalContainer>
+                <VerticalContainer space={0} isAutoWidth>
+                  <HorizontalContainer className={styles.badge} justify="center">
+                    <Text size="m" weight="semibold">{`№${cellNumber}`}</Text>
+                  </HorizontalContainer>
+                  <HorizontalContainer
+                    className={classNames(styles.badge, styles.badgeFilled)}
+                    justify="center"
+                  >
+                    <Text className={styles.text} size="l" weight="semibold">{`${price} ₽`}</Text>
+                  </HorizontalContainer>
+                </VerticalContainer>
               </VerticalContainer>
-            </VerticalContainer>
-          ))}
-        </HorizontalContainer>
-      ))}
+            ))}
+          </HorizontalContainer>
+        ))}
+      </VerticalContainer>
     </VerticalContainer>
   );
 };

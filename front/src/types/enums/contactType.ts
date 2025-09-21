@@ -6,7 +6,6 @@ export enum ContactType {
   EMAIL = 'EMAIL',
 }
 
-// TODO: вынести в глобальные методы
 /**
  * Трансформация enum => array
  *

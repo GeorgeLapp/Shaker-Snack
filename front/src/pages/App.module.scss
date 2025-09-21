@@ -17,5 +17,7 @@ $screen-height: 1280px;
 
   overflow: hidden;
 
-  background-color: var(--bg-main-body)
+  background-color: var(--bg-main-body);
+
+  position: relative;
 }

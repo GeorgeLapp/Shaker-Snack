@@ -5,6 +5,8 @@ $header-height: 100px;
 .ClientHeader {
   height: $header-height;
 
+  justify-content: space-between;
+
   .icon {
     width: $icon-width;
     height: $icon-height;

@@ -1,18 +1,28 @@
-import { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import ProductMatrix from './ProductMatrix';
-import VerticalContainer from '../../components/VerticalContainer';
-import ClientHeader from './ClientHeader';
 import styles from './ClientPage.module.scss';
+import { Route, Routes } from 'react-router-dom';
+import Product from './Product';
+import { useAppDispatch } from '../../app/hooks/store';
+import { getProductMatrixAction } from '../../state/client/action';
 
 /**
  * Страница покупателя
  */
 const ClientPage: FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getProductMatrixAction());
+  }, [dispatch]);
+
   return (
-    <VerticalContainer className={styles.ClientPage} space="m">
-      <ClientHeader />
-      <ProductMatrix />
-    </VerticalContainer>
+    <div className={styles.ClientPage}>
+      <Routes>
+        <Route path="/product/:cellId" element={<Product />} />
+        <Route path="/*" element={<ProductMatrix />} />
+      </Routes>
+    </div>
   );
 };
 

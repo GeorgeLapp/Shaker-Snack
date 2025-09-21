@@ -1,9 +1,7 @@
 export type StartSaleDTO = {
-  cellNUmber: number
-}
+  cellNumber: number;
+};
 
 export type StartSaleRes = {
   success: boolean;
-}
-
-
+};

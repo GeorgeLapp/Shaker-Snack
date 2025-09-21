@@ -1,5 +1,7 @@
 .Theme {
-  --graphics-size-xs: 12px;
+  /*--graphics-size-xs: 12px;*/
+  /* TODO: важно тут разобраться */
+  --graphics-size-xs: 0;
   --graphics-size-s: 16px;
   --graphics-size-m: 24px;
   --graphics-size-l: 32px;
