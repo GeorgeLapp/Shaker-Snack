@@ -4,12 +4,10 @@ import checker from 'vite-plugin-checker';
 
 export default defineConfig({
   base: '/',
-  plugins: [
-    react(),
-    checker({ typescript: true })
-  ],
+  plugins: [react(), checker({ typescript: true })],
   server: {
-    port: 3000,
+    host: '0.0.0.0',
+    port: 3050,
     strictPort: false,
   },
   resolve: {
@@ -18,4 +16,3 @@ export default defineConfig({
     },
   },
 });
-
