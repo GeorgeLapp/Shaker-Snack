@@ -10,7 +10,7 @@ const ensureLeadingSlash = (value) => (value.startsWith('/') ? value : `/${value
 const ensureTrailingSlash = (value) => (value.endsWith('/') ? value : `${value}/`);
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'http://localhost:3000';
 const STATIC_ROUTE_PREFIX = ensureTrailingSlash(
   ensureLeadingSlash(process.env.STATIC_ROUTE_PREFIX || '/media'),
 );

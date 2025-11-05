@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), checker({ typescript: true })],
   server: {
     host: '0.0.0.0',
-    port: 3050,
+    port: 3000,
     strictPort: false,
   },
   resolve: {
