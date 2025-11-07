@@ -81,7 +81,7 @@
     "@types/event-source-polyfill": "^1.0.5",
     "@types/node": "^22.10.2",
     "@types/qrcode": "^1.5.5",
+    "@vitejs/plugin-legacy": "^6.1.1",
     "vite-plugin-checker": "^0.8.0"
   }
 }
-
