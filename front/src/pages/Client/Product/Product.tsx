@@ -12,6 +12,9 @@ import classNames from 'classnames';
 import HorizontalContainer from '../../../components/HorizontalContainer';
 import SaleWorkflow from './SaleWorkflow';
 
+/**
+ * Страница продукта
+ */
 const Product: FC = () => {
   const { cellId } = useParams<{ cellId: string }>();
   const formattedCellId = Number(cellId) || null;
@@ -23,6 +26,7 @@ const Product: FC = () => {
 
   if (!cell) return <Text size="6xl">Ячейка не найдена</Text>;
 
+  // render методы
   const renderGeneralCard = () => (
     <VerticalContainer className={classNames(styles.card, styles.general)} space={0}>
       <HorizontalContainer className={styles.imgWrapper} justify="center">

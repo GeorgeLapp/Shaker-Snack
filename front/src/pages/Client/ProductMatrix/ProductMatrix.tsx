@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import styles from './ProductMatrix.module.scss';
 import { useAppSelector } from '../../../app/hooks/store';
 import { selectProductMatrix } from '../../../state/client/selectors';
@@ -10,6 +10,9 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import ClientHeader from '../ClientHeader';
 
+/**
+ * Матрица продуктов в меню покупки
+ */
 const ProductMatrix: FC = () => {
   const navigate = useNavigate();
 
@@ -20,51 +23,74 @@ const ProductMatrix: FC = () => {
     navigate(`/product/${productId}`);
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // render методы
+  const renderLoading = () => <Loader />;
 
-  if (isReject) {
-    return <Text size="6xl">Ошибка</Text>;
-  }
+  const renderError = () => (
+    <Text size="6xl" align="center">
+      Ошибка
+    </Text>
+  );
 
-  if (!productMatrix) {
-    return <Text size="6xl">Нет продуктов</Text>;
-  }
+  const renderEmpty = () => (
+    <Text size="6xl" align="center">
+      Нет продуктов
+    </Text>
+  );
+
+  const renderProductCell = ({ id, imgPath, cellNumber, price }: any) => (
+    <VerticalContainer
+      key={id}
+      className={styles.productCell}
+      space="2xs"
+      align="center"
+      onClick={handleProductClick(id)}
+    >
+      <HorizontalContainer className={styles.imgWrapper} justify="center">
+        <img className={styles.img} src={imgPath} alt={`Продукт №${cellNumber}`} />
+      </HorizontalContainer>
+
+      <VerticalContainer space={0} isAutoWidth>
+        <HorizontalContainer className={styles.badge} justify="center">
+          <Text size="m" weight="semibold">{`№${cellNumber}`}</Text>
+        </HorizontalContainer>
+
+        <HorizontalContainer
+          className={classNames(styles.badge, styles.badgeFilled)}
+          justify="center"
+        >
+          <Text className={styles.text} size="l" weight="semibold">
+            {`${price} ₽`}
+          </Text>
+        </HorizontalContainer>
+      </VerticalContainer>
+    </VerticalContainer>
+  );
+
+  const renderProductRow = (rowCells: any[]) => (
+    <HorizontalContainer className={styles.productRow} space="xs">
+      {rowCells.map(renderProductCell)}
+    </HorizontalContainer>
+  );
+
+  const renderMatrix = () => (
+    <VerticalContainer space="xs">
+      {productMatrix?.map((row, index) => (
+        <React.Fragment key={index}>{renderProductRow(row)}</React.Fragment>
+      ))}
+    </VerticalContainer>
+  );
+
+  if (isLoading) return renderLoading();
+
+  if (isReject) return renderError();
+
+  if (!productMatrix || productMatrix.length === 0) return renderEmpty();
 
   return (
     <VerticalContainer className={styles.ProductMatrix} space="m">
       <ClientHeader />
-      <VerticalContainer space="xs">
-        {productMatrix.map((rowCells) => (
-          <HorizontalContainer className={styles.ProductRow} space="xs">
-            {rowCells.map(({ id, imgPath, cellNumber, price }) => (
-              <VerticalContainer
-                key={id}
-                className={styles.ProductCell}
-                space="2xs"
-                align="center"
-                onClick={handleProductClick(id)}
-              >
-                <HorizontalContainer className={styles.imgWrapper} justify="center">
-                  <img className={styles.img} src={imgPath} />
-                </HorizontalContainer>
-                <VerticalContainer space={0} isAutoWidth>
-                  <HorizontalContainer className={styles.badge} justify="center">
-                    <Text size="m" weight="semibold">{`№${cellNumber}`}</Text>
-                  </HorizontalContainer>
-                  <HorizontalContainer
-                    className={classNames(styles.badge, styles.badgeFilled)}
-                    justify="center"
-                  >
-                    <Text className={styles.text} size="l" weight="semibold">{`${price} ₽`}</Text>
-                  </HorizontalContainer>
-                </VerticalContainer>
-              </VerticalContainer>
-            ))}
-          </HorizontalContainer>
-        ))}
-      </VerticalContainer>
+      {renderMatrix()}
     </VerticalContainer>
   );
 };
