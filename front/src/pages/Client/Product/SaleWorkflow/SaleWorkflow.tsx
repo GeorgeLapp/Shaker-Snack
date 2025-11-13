@@ -99,8 +99,8 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
           status === 'error'
             ? styles.errorText
             : status === 'success'
-            ? styles.successText
-            : styles.defaultText
+              ? styles.successText
+              : styles.defaultText
         }
         size="4xl"
         weight="semibold"
@@ -159,7 +159,12 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
   const renderAction = () => {
     if (workflowSaleStatus === SaleWorkflowStatus.PaymentFailed) {
       return (
-        <HorizontalContainer className={styles.action} align="center" justify="center" onClick={retryPayment}>
+        <HorizontalContainer
+          className={styles.action}
+          align="center"
+          justify="center"
+          onClick={retryPayment}
+        >
           <Text className={styles.text} size="3xl">
             Повторить оплату
           </Text>
@@ -169,7 +174,12 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
 
     if (workflowSaleStatus === SaleWorkflowStatus.DispenseFailed) {
       return (
-        <HorizontalContainer className={styles.action} align="center" justify="center" onClick={handleClose}>
+        <HorizontalContainer
+          className={styles.action}
+          align="center"
+          justify="center"
+          onClick={handleClose}
+        >
           <Text className={styles.text} size="3xl">
             Повторить попытку
           </Text>
@@ -190,4 +200,3 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
 };
 
 export default SaleWorkflow;
-
