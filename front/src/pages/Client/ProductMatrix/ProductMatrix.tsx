@@ -9,6 +9,8 @@ import VerticalContainer from '../../../components/VerticalContainer';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import ClientHeader from '../ClientHeader';
+import { IconArrowLeft } from '../../../assets/icon/iconArrowLeft';
+import { Button } from '@consta/uikit/Button';
 
 /**
  * Матрица продуктов в меню покупки
@@ -81,6 +83,17 @@ const ProductMatrix: FC = () => {
     </VerticalContainer>
   );
 
+  const renderRightSide = () => (
+    <Button
+      iconSize="l"
+      view="secondary"
+      size="l"
+      onlyIcon
+      iconLeft={IconArrowLeft}
+      onClick={() => navigate('/menu')}
+    />
+  );
+
   if (isLoading) return renderLoading();
 
   if (isReject) return renderError();
@@ -89,7 +102,7 @@ const ProductMatrix: FC = () => {
 
   return (
     <VerticalContainer className={styles.ProductMatrix} space="m">
-      <ClientHeader />
+      <ClientHeader renderRightSide={renderRightSide} />
       {renderMatrix()}
     </VerticalContainer>
   );
