@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { Text } from '@consta/uikit/Text';
 import VerticalContainer from '../../../components/VerticalContainer';
 import HorizontalContainer from '../../../components/HorizontalContainer';
@@ -13,12 +13,46 @@ import { IconShakerCup } from '../../../assets/icon/iconShakerCup';
 import { IconFilter } from '../../../assets/icon/iconFilter';
 import { IconFavoriteFilled } from '../../../assets/icon/iconFavoriteFilled';
 import { IconDollarCircle } from '../../../assets/icon/iconDollarCircle';
+import { MenuItem } from './types';
 
 /**
  * Сервисное меню
  */
 const ServiceMenu: FC = () => {
   const navigate = useNavigate();
+
+  const menuItems: MenuItem[] = [
+    {
+      title: 'Управление ячейками',
+      description: 'Остатки, Глубина, Цены, Товары, Конфигурация ячеек',
+      icon: <IconShakerCup size="m" className={styles.icon} />,
+    },
+    {
+      title: 'Настройки покупки',
+      description: 'Уведомления, Учёт остатков, Реклама и др.',
+      icon: <IconWrench size="m" className={styles.icon} />,
+    },
+    {
+      title: 'Настройки автомата',
+      description: 'Температура, Подсветка, Серийный порт, Лифт',
+      icon: <IconFilter size="m" className={styles.icon} />,
+    },
+    {
+      title: 'Общие настройки',
+      description: 'Список товаров, Сервер, Устройства, Роли',
+      icon: <IconFilter size="m" className={styles.icon} />,
+    },
+    {
+      title: 'Диагностика',
+      description: 'Тест ячеек, ошибки, Информация, Логи',
+      icon: <IconFavoriteFilled size="m" className={styles.icon} />,
+    },
+    {
+      title: 'Приложение',
+      description: 'Файлы приложения, Настройки приложения',
+      icon: <IconDollarCircle size="m" className={styles.icon} />,
+    },
+  ];
 
   // render методы
   const renderHeader = () => (
@@ -36,7 +70,7 @@ const ServiceMenu: FC = () => {
     </HorizontalContainer>
   );
 
-  const renderCard = (title: string, description: string, icon: ReactNode) => (
+  const renderCard = ({ title, description, icon }: MenuItem) => (
     <ContentCard className={styles.contentCard}>
       <HorizontalContainer isAutoWidth isAutoSpace>
         <HorizontalContainer space="m">
@@ -56,37 +90,10 @@ const ServiceMenu: FC = () => {
   );
 
   const renderCards = () => (
-    <VerticalContainer space="m">
-      {renderCard(
-        'Управление ячейками',
-        'Остатки, Глубина, Цены, Товары, Конфигурация ячеек',
-        <IconShakerCup size="m" className={styles.icon} />,
-      )}
-      {renderCard(
-        'Настройки покупки',
-        'Уведомления, Учёт остатков, Реклама и др.',
-        <IconWrench size="m" className={styles.icon} />,
-      )}
-      {renderCard(
-        'Настройки автомата',
-        'Температура, Подсветка, Серийный порт, Лифт',
-        <IconFilter size="m" className={styles.icon} />,
-      )}
-      {renderCard(
-        'Общие настройки',
-        'Список товаров, Сервер, Устройства, Роли',
-        <IconFilter size="m" className={styles.icon} />,
-      )}
-      {renderCard(
-        'Диагностика',
-        'Тест ячеек, ошибки, Информация, Логи',
-        <IconFavoriteFilled size="m" className={styles.icon} />,
-      )}
-      {renderCard(
-        'Приложение',
-        'Файлы приложения, Настройки приложения',
-        <IconDollarCircle size="m" className={styles.icon} />,
-      )}
+    <VerticalContainer>
+      {menuItems.map((item, index) => (
+        <div key={index}>{renderCard(item)}</div>
+      ))}
     </VerticalContainer>
   );
 
