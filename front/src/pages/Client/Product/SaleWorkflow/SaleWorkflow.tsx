@@ -15,40 +15,20 @@ import { IconAwaitingCard } from '../../../../assets/icon/iconAwaitindCard';
 import { IconDispensed } from '../../../../assets/icon/iconDispensed';
 import { IconPaymentFailed } from '../../../../assets/icon/iconPaymentFailed';
 import classNames from 'classnames';
+import { IconLoading } from '../../../../assets/icon/iconLoading';
 
-const SUCCESS_DESCRIPTION = 'Возьмите лакомство и наслаждайтесь!';
+const SUCCESS_DESCRIPTION = 'Спасибо за покупку!';
 
-const ERROR_PAYMENT_DESCRIPTION =
-  'Списание средств не удалось. Проверьте карту или попробуйте выбрать другой товар.';
+const ERROR_PAYMENT_DESCRIPTION = 'Попробуйте повторно \n' + 'или проверьте баланс';
 
-const ERROR_DISPENSE_DESCRIPTION =
-  'Товар не был выдан. Обратитесь в сервисную службу или выберите другой продукт.';
+const ERROR_DISPENSE_DESCRIPTION = 'Средства скоро вернутся на карту';
 
 const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
   const dispatch = useAppDispatch();
-  const workflowSaleStatus = useAppSelector(selectSaleWorkflowStatus());
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(startSaleWorkflow(cell));
-
-    return () => {
-      dispatch(cancelSaleWorkflow());
-    };
-  }, [dispatch, cell]);
-
-  const handleClose = () => {
-    dispatch(cancelSaleWorkflow());
-    onClose();
-
-    if (workflowSaleStatus === SaleWorkflowStatus.Dispensed) {
-      navigate('/');
-    }
-  };
-
-  const retryPayment = () => {
-    dispatch(startSaleWorkflow(cell));
-  };
+  const workflowSaleStatus = useAppSelector(selectSaleWorkflowStatus());
 
   const isError =
     workflowSaleStatus === SaleWorkflowStatus.PaymentFailed ||
@@ -66,6 +46,29 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
     [workflowSaleStatus],
   );
 
+  useEffect(() => {
+    dispatch(startSaleWorkflow(cell));
+
+    return () => {
+      dispatch(cancelSaleWorkflow());
+    };
+  }, [dispatch, cell]);
+
+  // Обработчики
+  const handleClose = () => {
+    dispatch(cancelSaleWorkflow());
+    onClose();
+
+    if (workflowSaleStatus === SaleWorkflowStatus.Dispensed) {
+      navigate('/');
+    }
+  };
+
+  const retryPayment = () => {
+    dispatch(startSaleWorkflow(cell));
+  };
+
+  // render методы
   const renderModalHeader = () => (
     <HorizontalContainer className={styles.header} justify="end">
       {isCloseAllowed && (
@@ -120,15 +123,15 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
         return renderContentWrapper({
           title: 'Приложите карту к терминалу',
           status: 'default',
-          description: 'Держите карту у считывателя, пока мы подтверждаем оплату.',
+          description: 'Либо дождитесь появления QR-кода для оплаты СБП',
           icon: <IconAwaitingCard className={classNames(styles.icon, styles.defaultIcon)} />,
         });
       case SaleWorkflowStatus.PaymentSuccess:
         return renderContentWrapper({
           title: 'Оплата прошла успешно',
-          status: 'success',
-          description: 'Готовим ваш товар к выдаче. Это займёт всего несколько секунд.',
-          icon: <IconDispensed className={classNames(styles.icon, styles.successIcon)} />,
+          status: 'default',
+          description: 'Дождитесь выдачи товара',
+          icon: <IconLoading className={classNames(styles.icon, styles.defaultIcon)} />,
         });
       case SaleWorkflowStatus.Dispensed:
         return renderContentWrapper({
@@ -166,7 +169,7 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
           onClick={retryPayment}
         >
           <Text className={styles.text} size="3xl">
-            Повторить оплату
+            Попробовать еще раз
           </Text>
         </HorizontalContainer>
       );
@@ -181,7 +184,7 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
           onClick={handleClose}
         >
           <Text className={styles.text} size="3xl">
-            Повторить попытку
+            Попробовать еще раз
           </Text>
         </HorizontalContainer>
       );
