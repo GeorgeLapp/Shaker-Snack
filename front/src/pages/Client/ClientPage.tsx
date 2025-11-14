@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Product from './Product';
 import { useAppDispatch } from '../../app/hooks/store';
 import { getProductMatrixAction } from '../../state/client/action';
+import ServiceMenu from '../Service/ServiceMenu';
 
 /**
  * Страница покупателя
@@ -21,6 +22,7 @@ const ClientPage: FC = () => {
       <Routes>
         <Route path="/product/:cellId" element={<Product />} />
         <Route path="/*" element={<ProductMatrix />} />
+        <Route path="/menu" element={<ServiceMenu />} />
       </Routes>
     </div>
   );
