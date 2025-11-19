@@ -6,6 +6,7 @@ import Product from './Product';
 import { useAppDispatch } from '../../app/hooks/store';
 import { getProductMatrixAction } from '../../state/client/action';
 import ServiceMenu from '../Service/ServiceMenu';
+import CellsControl from '../Service/ServiceMenu/CellsControl';
 
 /**
  * Страница покупателя
@@ -23,6 +24,7 @@ const ClientPage: FC = () => {
         <Route path="/product/:cellId" element={<Product />} />
         <Route path="/*" element={<ProductMatrix />} />
         <Route path="/menu" element={<ServiceMenu />} />
+        <Route path="/menu/cellControl" element={<CellsControl />} />
       </Routes>
     </div>
   );

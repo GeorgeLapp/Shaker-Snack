@@ -26,31 +26,37 @@ const ServiceMenu: FC = () => {
       title: 'Управление ячейками',
       description: 'Остатки, Глубина, Цены, Товары, Конфигурация ячеек',
       icon: <IconShakerCup size="m" className={styles.icon} />,
+      onClick: () => navigate('/menu/cellControl'),
     },
     {
       title: 'Настройки покупки',
       description: 'Уведомления, Учёт остатков, Реклама и др.',
       icon: <IconWrench size="m" className={styles.icon} />,
+      onClick: () => {},
     },
     {
       title: 'Настройки автомата',
       description: 'Температура, Подсветка, Серийный порт, Лифт',
       icon: <IconFilter size="m" className={styles.icon} />,
+      onClick: () => {},
     },
     {
       title: 'Общие настройки',
       description: 'Список товаров, Сервер, Устройства, Роли',
       icon: <IconFilter size="m" className={styles.icon} />,
+      onClick: () => {},
     },
     {
       title: 'Диагностика',
       description: 'Тест ячеек, ошибки, Информация, Логи',
       icon: <IconFavoriteFilled size="m" className={styles.icon} />,
+      onClick: () => {},
     },
     {
       title: 'Приложение',
       description: 'Файлы приложения, Настройки приложения',
       icon: <IconDollarCircle size="m" className={styles.icon} />,
+      onClick: () => {},
     },
   ];
 
@@ -70,8 +76,8 @@ const ServiceMenu: FC = () => {
     </HorizontalContainer>
   );
 
-  const renderCard = ({ title, description, icon }: MenuItem) => (
-    <ContentCard className={styles.contentCard}>
+  const renderCard = ({ title, description, icon, onClick }: MenuItem) => (
+    <ContentCard className={styles.contentCard} onClick={onClick}>
       <HorizontalContainer isAutoWidth isAutoSpace>
         <HorizontalContainer space="m">
           <div className={styles.circle}>{icon}</div>

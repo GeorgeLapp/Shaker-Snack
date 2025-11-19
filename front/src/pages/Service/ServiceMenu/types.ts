@@ -16,4 +16,8 @@ export type MenuItem = {
    * Иконка
    */
   icon: ReactNode;
+  /**
+   * Обработчик нажатия на карточку меню
+   */
+  onClick: () => void;
 };
