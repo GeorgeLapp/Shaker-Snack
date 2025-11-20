@@ -23,7 +23,7 @@ const rowContentHeight = 222;
 const CellsControlPrices: FC = () => {
   const dispatch = useAppDispatch();
 
-  const { cellsPricesRows } = useCellsControlPrices();
+  const { cellsPricesRows, isRejectCellsPrices } = useCellsControlPrices();
 
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [isChangeCellsPricesOpen, setIsChangeCellsPricesOpen] = useState(false);
@@ -71,10 +71,10 @@ const CellsControlPrices: FC = () => {
       <ContentCard className={styles.mainPartCard}>
         <img
           src={imgPath}
+          className={styles.img}
           alt="product image"
           loading="lazy"
           decoding="async"
-          className={styles.img}
           onError={(e) => (e.currentTarget.src = '/images/placeholder.png')}
         />
       </ContentCard>
@@ -118,14 +118,22 @@ const CellsControlPrices: FC = () => {
     />
   );
 
+  const renderError = () => (
+    <Text size="6xl" align="center">
+      Ошибка
+    </Text>
+  );
+
   const renderModal = () =>
     selectedRow !== null && (
       <ChangeCellsControlPricesRow
-        row={selectedRow}
         isOpen={isChangeCellsPricesOpen}
+        row={selectedRow}
         onClose={handleChangeCellsPricesRowClose}
       />
     );
+
+  if (isRejectCellsPrices) return renderError();
 
   return (
     <VerticalContainer className={styles.CellsControlPrices}>

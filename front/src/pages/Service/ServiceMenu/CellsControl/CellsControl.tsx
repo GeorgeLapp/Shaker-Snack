@@ -14,6 +14,7 @@ import { CellControlEnum } from './types';
 import CellsControlPrices from './CellsControlPrices';
 import { backToServiceMenuAction } from '../../../../state/serviceMenu/action';
 import { useAppDispatch } from '../../../../app/hooks/store';
+import { cellControlTabs } from './const';
 
 /**
  * Управление ячейками
@@ -27,41 +28,24 @@ const CellsControl: FC = () => {
     CellControlEnum.STOCKS,
   );
 
-  const tabsList = useMemo(
-    (): TabProps[] => [
-      {
-        label: 'Остатки',
-        isSelect: selectedCellControlTab === CellControlEnum.STOCKS,
-        onClick: () => setSelectedCellControlTab(CellControlEnum.STOCKS),
-      },
-      {
-        label: 'Глубина',
-        isSelect: selectedCellControlTab === CellControlEnum.DEPTH,
-        onClick: () => setSelectedCellControlTab(CellControlEnum.DEPTH),
-      },
-      {
-        label: 'Цены',
-        isSelect: selectedCellControlTab === CellControlEnum.PRICES,
-        onClick: () => setSelectedCellControlTab(CellControlEnum.PRICES),
-      },
-      {
-        label: 'Товары',
-        isSelect: selectedCellControlTab === CellControlEnum.GOODS,
-        onClick: () => setSelectedCellControlTab(CellControlEnum.GOODS),
-      },
-      {
-        label: 'Конфиг ячеек',
-        isSelect: selectedCellControlTab === CellControlEnum.CONFIG,
-        onClick: () => setSelectedCellControlTab(CellControlEnum.CONFIG),
-      },
-    ],
-    [selectedCellControlTab],
-  );
-
   // Обработчики
   const handleBackClick = () => {
-    dispatch(backToServiceMenuAction()).finally(() => navigate('/menu'));
+    dispatch(backToServiceMenuAction()).then(() => navigate('/menu'));
   };
+
+  const handleTabClick = (value: CellControlEnum) => {
+    setSelectedCellControlTab(value);
+  };
+
+  const tabsList = useMemo<TabProps[]>(
+    () =>
+      cellControlTabs.map((tab) => ({
+        label: tab.label,
+        isSelect: selectedCellControlTab === tab.value,
+        onClick: () => handleTabClick(tab.value),
+      })),
+    [selectedCellControlTab],
+  );
 
   // render методы
   const renderHeader = () => (
@@ -97,6 +81,7 @@ const CellsControl: FC = () => {
       case CellControlEnum.PRICES:
         return <CellsControlPrices />;
       default:
+        return;
     }
   };
 

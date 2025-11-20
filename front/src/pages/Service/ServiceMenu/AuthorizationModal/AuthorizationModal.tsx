@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { AuthorizationModalProps } from './types';
 import DefaultModal from '../../../../components/DefaultModal';
 import HorizontalContainer from '../../../../components/HorizontalContainer';
@@ -19,10 +19,14 @@ const AuthorizationModal: FC<AuthorizationModalProps> = ({ isOpen, onClose }) =>
 
   const [pin, setPin] = useState<string | null>(null);
 
+  const isSubmitDisabled = useMemo(() => !pin || pin.trim().length === 0, [pin]);
+
   // Обработчики
   const handleSubmitPin = () => {
+    if (isSubmitDisabled) return;
+
     const newPin: Pin = {
-      pin: pin || '',
+      pin: pin!.trim(),
     };
 
     dispatch(authSubmitPinAction(newPin)).then(() => {
@@ -51,14 +55,20 @@ const AuthorizationModal: FC<AuthorizationModalProps> = ({ isOpen, onClose }) =>
   const renderActions = () => (
     <HorizontalContainer space="m">
       <Button size="m" view="clear" label="Отменить" onClick={onClose} />
-      <Button size="m" view="primary" label="Войти" onClick={handleSubmitPin} />
+      <Button
+        size="m"
+        view="primary"
+        label="Войти"
+        onClick={handleSubmitPin}
+        disabled={isSubmitDisabled}
+      />
     </HorizontalContainer>
   );
 
   return (
     <DefaultModal
-      modalTitle="Авторизация по PIN"
       isOpen={isOpen}
+      modalTitle="Авторизация по PIN"
       renderActions={renderActions}
       onClose={onClose}
     >

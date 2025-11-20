@@ -6,7 +6,7 @@ import { useMemo } from 'react';
  * Хук для преобразования цен ячеек
  */
 export const useCellsControlPrices = () => {
-  const { state: cellsPrices } = useAppSelector(selectCellsPrices());
+  const { state: cellsPrices, isReject: isRejectCellsPrices } = useAppSelector(selectCellsPrices());
 
   const cellsPricesRows = useMemo(() => {
     const cells = cellsPrices?.view.cells || [];
@@ -25,5 +25,5 @@ export const useCellsControlPrices = () => {
     return rows;
   }, [cellsPrices]);
 
-  return { cellsPricesRows };
+  return { cellsPricesRows, isRejectCellsPrices };
 };

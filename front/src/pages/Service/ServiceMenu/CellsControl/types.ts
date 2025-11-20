@@ -23,3 +23,17 @@ export enum CellControlEnum {
    */
   CONFIG = 'CONFIG',
 }
+
+/**
+ * Массив табов
+ */
+export type CellControlTab = {
+  /**
+   * Заголовок
+   */
+  label: string;
+  /**
+   * Значение
+   */
+  value: CellControlEnum;
+};

@@ -58,11 +58,21 @@ export type CellPrice = {
   type: string;
 };
 
+/**
+ * Мета информация
+ */
+export type Meta = {
+  /**
+   * Текст предупреждения
+   */
+  warn?: string;
+};
+
 export type ServiceMenuAuthorizationDTO = {
   /**
    * Мета информация
    */
-  meta: any;
+  meta: Meta;
   /**
    * Состояние
    */
@@ -89,7 +99,7 @@ export type ServiceMenuPricesDTO = {
   /**
    * Мета информация
    */
-  meta: any;
+  meta: Meta;
   /**
    * Состояние
    */

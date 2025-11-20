@@ -17,8 +17,8 @@ import { getInputNumberValue } from '../../../../../../helpers/inputHelpers';
  * Модальное окно для смены цены во всем ряду
  */
 const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
-  row,
   isOpen,
+  row,
   onClose,
 }) => {
   const dispatch = useAppDispatch();
@@ -70,8 +70,8 @@ const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
 
   return (
     <DefaultModal
-      modalTitle="Изменение цены ряда"
       isOpen={isOpen}
+      modalTitle="Изменение цены ряда"
       renderActions={renderActions}
       onClose={onClose}
     >

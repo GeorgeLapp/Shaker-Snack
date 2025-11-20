@@ -3,13 +3,13 @@
  */
 export type ChangeCellControlPricesRowProps = {
   /**
-   * Номер ряда
-   */
-  row: number;
-  /**
    * Флаг открытия модального окна
    */
   isOpen: boolean;
+  /**
+   * Номер ряда
+   */
+  row: number;
   /**
    * Обработчик закрытия модального окна
    */

@@ -1,6 +1,11 @@
 import { errorHandler, NotificationType } from '../handlers';
 import { createSlice, isRejected } from '@reduxjs/toolkit';
-import { getCellsConfigThunk, getCellsPricesThunk, getCellsStocksThunk } from './thunk';
+import {
+  getCellsConfigThunk,
+  getCellsPricesThunk,
+  getCellsStocksThunk,
+  getOpenSettingsThunk,
+} from './thunk';
 import { ServiceMenuPricesDTO } from '../../types/serverInterface/serviceMenuDTO';
 
 type StateItemType<T> = {
@@ -10,6 +15,7 @@ type StateItemType<T> = {
 };
 
 export type ServiceMenuState = {
+  openSettings: StateItemType<any>;
   cellsConfig: StateItemType<any>;
   cellsStocks: StateItemType<any>;
   cellsPrices: StateItemType<ServiceMenuPricesDTO>;
@@ -17,6 +23,11 @@ export type ServiceMenuState = {
 };
 
 const initialState: ServiceMenuState = {
+  openSettings: {
+    state: null,
+    isLoading: false,
+    isReject: false,
+  },
   cellsConfig: {
     state: null,
     isLoading: false,
@@ -28,7 +39,11 @@ const initialState: ServiceMenuState = {
     isReject: false,
   },
   cellsPrices: {
-    state: { meta: null, state: '', view: { cells: [], screen: '' } },
+    state: {
+      meta: {},
+      state: '',
+      view: { cells: [], screen: '' },
+    },
     isLoading: false,
     isReject: false,
   },
@@ -47,6 +62,23 @@ const serviceMenuSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // getOpenSettingsThunk
+    builder.addCase(getOpenSettingsThunk.pending, (state) => {
+      state.openSettings.isLoading = true;
+      state.openSettings.isReject = false;
+    });
+
+    builder.addCase(getOpenSettingsThunk.fulfilled, (state, action) => {
+      state.openSettings.isLoading = false;
+      state.openSettings.state = action.payload;
+      state.openSettings.isReject = false;
+    });
+
+    builder.addCase(getOpenSettingsThunk.rejected, (state) => {
+      state.openSettings.isLoading = false;
+      state.openSettings.isReject = true;
+    });
+
     // getCellsConfigThunk
     builder.addCase(getCellsConfigThunk.pending, (state) => {
       state.cellsConfig.isLoading = true;
@@ -89,8 +121,8 @@ const serviceMenuSlice = createSlice({
 
     builder.addCase(getCellsPricesThunk.fulfilled, (state, action) => {
       state.cellsPrices.isLoading = false;
-      state.cellsPrices.state = action.payload as ServiceMenuPricesDTO;
-      state.cellsPrices.isReject = false;
+      state.cellsPrices.state = action.payload;
+      state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsPricesThunk.rejected, (state) => {
