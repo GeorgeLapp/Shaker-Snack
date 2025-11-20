@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './ProductMatrix.module.scss';
-import { useAppSelector } from '../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { selectProductMatrix } from '../../../state/client/selectors';
 import { Loader } from '@consta/uikit/Loader';
 import { Text } from '@consta/uikit/Text';
@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import ClientHeader from '../ClientHeader';
 import { IconArrowLeft } from '../../../assets/icon/iconArrowLeft';
 import { Button } from '@consta/uikit/Button';
+import { getOpenSettingsAction } from '../../../state/serviceMenu/action';
+import AuthorizationModal from '../../Service/ServiceMenu/AuthorizationModal';
 
 /**
  * Матрица продуктов в меню покупки
@@ -18,11 +20,25 @@ import { Button } from '@consta/uikit/Button';
 const ProductMatrix: FC = () => {
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   const { state: productMatrix, isLoading, isReject } = useAppSelector(selectProductMatrix());
+
+  const [isPasswordMenuOpen, setIsPasswordMenuOpen] = useState<boolean>(false);
 
   // Обработчики
   const handleProductClick = (productId: number) => () => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleArrowClick = () => {
+    dispatch(getOpenSettingsAction());
+
+    setIsPasswordMenuOpen(true);
+  };
+
+  const handlePasswordMenuClose = () => {
+    setIsPasswordMenuOpen(false);
   };
 
   // render методы
@@ -90,8 +106,12 @@ const ProductMatrix: FC = () => {
       size="l"
       onlyIcon
       iconLeft={IconArrowLeft}
-      onClick={() => navigate('/menu')}
+      onClick={handleArrowClick}
     />
+  );
+
+  const renderModal = () => (
+    <AuthorizationModal isOpen={isPasswordMenuOpen} onClose={handlePasswordMenuClose} />
   );
 
   if (isLoading) return renderLoading();
@@ -104,6 +124,7 @@ const ProductMatrix: FC = () => {
     <VerticalContainer className={styles.ProductMatrix} space="m">
       <ClientHeader renderRightSide={renderRightSide} />
       {renderMatrix()}
+      {renderModal()}
     </VerticalContainer>
   );
 };

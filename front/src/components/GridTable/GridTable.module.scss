@@ -1,22 +1,29 @@
 .gridTable {
-  display: flex;
   flex-direction: column;
+
+  display: flex;
+
   width: 100%;
 }
 
 .gridRow {
-  display: flex;
   flex-direction: column;
+
+  display: flex;
+
   width: 100%;
 }
 
 .rowHeader {
-  display: flex;
   align-items: center;
-  background: var(--bg-main-quaternary);
-  padding: var(--space-xs) var(--space-l);
+
+  display: flex;
+
   border-radius: var(--control-radius-round-m) var(--control-radius-round-m) 0 0;
   box-sizing: border-box;
+  padding: var(--space-xs) var(--space-l);
+
+  background: var(--bg-main-quaternary);
 }
 
 .defaultRowHeader {
@@ -25,15 +32,18 @@
 
 .rowContent {
   display: grid;
-  padding: var(--space-xs) var(--space-2xs);
-  background-color: var(--bg-main-tertriary);
+
   border-bottom: none;
   border-radius: 0 0 var(--control-radius-round-m) var(--control-radius-round-m);
   box-sizing: border-box;
+  padding: var(--space-xs) var(--space-2xs);
+
+  background-color: var(--bg-main-tertriary);
 }
 
 .gridCell {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+
+  display: flex;
 }

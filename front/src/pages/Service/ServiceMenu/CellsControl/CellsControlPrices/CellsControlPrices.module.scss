@@ -1,0 +1,52 @@
+$cellNumberCardHeight: 24px;
+$mainPartCardHeight: 100px;
+$imgHeight: 100px;
+
+.CellsControlPrices {
+  .cellNumberCard {
+    width: 100%;
+    height: $cellNumberCardHeight;
+    border-radius: var(--control-radius-round-s) var(--control-radius-round-s) 0  0;
+    box-sizing: border-box;
+    padding: var(--space-3xs) var(--space-xs);
+
+    background: var(--bg-status-system);
+  }
+
+  .mainPartCard {
+    width: 100%;
+    height: $mainPartCardHeight;
+    border-radius: 0;
+    border-right: 1px solid var(--bg-main-quaternary);
+    border-left: 1px solid var(--bg-main-quaternary);
+    padding: 0;
+
+    background: var(--bg-main-brand);
+
+    .img {
+      height: $imgHeight;
+      max-width: 100%;
+
+      overflow: hidden;
+    }
+  }
+
+  .priceCellCard {
+    box-sizing: border-box;
+    border-radius: 0 0 var(--control-radius-s) var(--control-radius-s);
+    height: $cellNumberCardHeight;
+    padding: var(--space-3xs) var(--space-xs);
+
+    background: var(--bg-main-quaternary);
+  }
+
+  .productNameText {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}

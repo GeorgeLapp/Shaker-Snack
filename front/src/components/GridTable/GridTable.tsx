@@ -27,7 +27,8 @@ const GridTable = <T,>({
           <div
             className={styles.rowContent}
             style={{
-              height: rowContentHeight,
+              height: 'auto',
+              maxHeight: rowContentHeight,
               gridTemplateColumns: `repeat(${rowData.length}, 1fr)`,
               gap: cellGap,
             }}

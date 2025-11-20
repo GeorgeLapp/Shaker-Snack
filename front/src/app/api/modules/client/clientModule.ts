@@ -1,7 +1,10 @@
 import { AbstractApiModule } from '../../abstractApiModule';
 import { ProductMatrixDTO } from '../../../../types/serverInterface/ProductMatrixDTO';
 import { StartSaleDTO, StartSaleRes } from '../../../../types/serverInterface/StartSaleDTO';
-import { IssueProductDTO, IssueProductRes } from '../../../../types/serverInterface/IssueProductDTO';
+import {
+  IssueProductDTO,
+  IssueProductRes,
+} from '../../../../types/serverInterface/IssueProductDTO';
 import { buildSnackMediaUrl } from '../../../../helpers/media';
 
 const ENDPOINTS = {
@@ -12,14 +15,12 @@ const ENDPOINTS = {
 
 export class ClientModule extends AbstractApiModule {
   getProductMatrix(): Promise<ProductMatrixDTO> {
-    return this.request
-      .get<undefined, ProductMatrixDTO>(ENDPOINTS.productMatrix)
-      .then((matrix) =>
-        matrix.map((item) => ({
-          ...item,
-          imgPath: buildSnackMediaUrl(item.imgPath),
-        })),
-      );
+    return this.request.get<undefined, ProductMatrixDTO>(ENDPOINTS.productMatrix).then((matrix) =>
+      matrix.map((item) => ({
+        ...item,
+        imgPath: buildSnackMediaUrl(item.imgPath),
+      })),
+    );
   }
 
   startSale(startSaleData: StartSaleDTO): Promise<StartSaleRes> {
