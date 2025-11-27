@@ -17,7 +17,7 @@ export enum CellControlEnum {
   /**
    * Товары
    */
-  GOODS = 'GOODS',
+  PRODUCTS = 'PRODUCTS',
   /**
    * Конфиг
    */

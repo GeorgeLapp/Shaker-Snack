@@ -1,0 +1,8 @@
+$ChangeCellsControlPriceWidth: 640px;
+
+.ChangeCellsControlPrice {
+  width: $ChangeCellsControlPriceWidth;
+  box-sizing: border-box;
+
+  background: var(--bg-main-body);
+}

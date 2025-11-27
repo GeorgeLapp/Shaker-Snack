@@ -19,3 +19,20 @@ export const selectCellsStocks = () => (state: RootState) => state.serviceMenu.c
  * Селектор получения цен
  */
 export const selectCellsPrices = () => (state: RootState) => state.serviceMenu.cellsPrices;
+
+/**
+ * Селектор получения товаров
+ */
+export const selectCellsProducts = () => (state: RootState) => state.serviceMenu.cellsProducts;
+
+/**
+ * Селектор получения всех товаров
+ */
+export const selectChangeCellsProducts = () => (state: RootState) =>
+  state.serviceMenu.changeCellsProducts;
+
+/**
+ * Селектор получения списка товаров
+ */
+export const selectOpenProductsList = () => (state: RootState) =>
+  state.serviceMenu.openProductsList;

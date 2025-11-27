@@ -1,12 +1,19 @@
 import { errorHandler, NotificationType } from '../handlers';
-import { createSlice, isRejected } from '@reduxjs/toolkit';
+import { createSlice, isRejected, PayloadAction } from '@reduxjs/toolkit';
 import {
   getCellsConfigThunk,
   getCellsPricesThunk,
+  getCellsProductsThunk,
   getCellsStocksThunk,
+  getOpenProductsListThunk,
   getOpenSettingsThunk,
 } from './thunk';
-import { ServiceMenuPricesDTO } from '../../types/serverInterface/serviceMenuDTO';
+import {
+  ChangeCellsProducts,
+  OpenProductListDTO,
+  ServiceMenuPricesDTO,
+  ServiceMenuProductsDTO,
+} from '../../types/serverInterface/serviceMenuDTO';
 
 type StateItemType<T> = {
   state: T extends [] ? T : T | null;
@@ -19,6 +26,9 @@ export type ServiceMenuState = {
   cellsConfig: StateItemType<any>;
   cellsStocks: StateItemType<any>;
   cellsPrices: StateItemType<ServiceMenuPricesDTO>;
+  cellsProducts: StateItemType<ServiceMenuProductsDTO>;
+  openProductsList: StateItemType<OpenProductListDTO>;
+  changeCellsProducts: ChangeCellsProducts;
   notifications: NotificationType[];
 };
 
@@ -47,6 +57,26 @@ const initialState: ServiceMenuState = {
     isLoading: false,
     isReject: false,
   },
+  cellsProducts: {
+    state: null,
+    isLoading: false,
+    isReject: false,
+  },
+  openProductsList: {
+    state: {
+      meta: {},
+      state: '',
+      view: { products: [], screen: '' },
+    },
+    isLoading: false,
+    isReject: false,
+  },
+  changeCellsProducts: {
+    mode: null,
+    row: null,
+    cell: null,
+    productName: null,
+  },
   notifications: [],
 };
 
@@ -60,7 +90,19 @@ const addNotification = (state: ServiceMenuState) => (notification: Notification
 const serviceMenuSlice = createSlice({
   name: 'serviceMenu',
   initialState,
-  reducers: {},
+  reducers: {
+    setChangeCellsProducts(state, action: PayloadAction<ChangeCellsProducts>) {
+      state.changeCellsProducts = action.payload;
+    },
+    resetChangeCellsProducts(state) {
+      state.changeCellsProducts = {
+        mode: null,
+        row: null,
+        cell: null,
+        productName: null,
+      };
+    },
+  },
   extraReducers: (builder) => {
     // getOpenSettingsThunk
     builder.addCase(getOpenSettingsThunk.pending, (state) => {
@@ -130,10 +172,46 @@ const serviceMenuSlice = createSlice({
       state.cellsPrices.isReject = true;
     });
 
+    // getCellsProductsThunk
+    builder.addCase(getCellsProductsThunk.pending, (state) => {
+      state.cellsProducts.isLoading = true;
+      state.cellsProducts.isReject = false;
+    });
+
+    builder.addCase(getCellsProductsThunk.fulfilled, (state, action) => {
+      state.cellsProducts.isLoading = false;
+      state.cellsProducts.state = action.payload;
+      state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
+    });
+
+    builder.addCase(getCellsProductsThunk.rejected, (state) => {
+      state.cellsProducts.isLoading = false;
+      state.cellsProducts.isReject = true;
+    });
+
+    // getOpenProductsListThunk
+    builder.addCase(getOpenProductsListThunk.pending, (state) => {
+      state.openProductsList.isLoading = true;
+      state.openProductsList.isReject = false;
+    });
+
+    builder.addCase(getOpenProductsListThunk.fulfilled, (state, action) => {
+      state.openProductsList.isLoading = false;
+      state.openProductsList.state = action.payload;
+      state.openProductsList.isReject = Boolean(action.payload.meta?.warn);
+    });
+
+    builder.addCase(getOpenProductsListThunk.rejected, (state) => {
+      state.openProductsList.isLoading = false;
+      state.openProductsList.isReject = true;
+    });
+
     builder.addMatcher(isRejected(), (state, action) => {
       errorHandler(action)(addNotification(state));
     });
   },
 });
+
+export const { setChangeCellsProducts, resetChangeCellsProducts } = serviceMenuSlice.actions;
 
 export const serviceMenuReducer = serviceMenuSlice.reducer;

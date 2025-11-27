@@ -15,10 +15,10 @@ export const cellControlTabs: CellControlTab[] = [
   },
   {
     label: 'Товары',
-    value: CellControlEnum.GOODS,
+    value: CellControlEnum.PRODUCTS,
   },
   {
-    label: 'Конфиг ячеек',
+    label: 'Конфиг. ячеек',
     value: CellControlEnum.CONFIG,
   },
 ];

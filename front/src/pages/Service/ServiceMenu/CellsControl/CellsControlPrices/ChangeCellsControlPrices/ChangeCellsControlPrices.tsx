@@ -1,24 +1,32 @@
 import { FC, useState } from 'react';
-import { ChangeCellControlPricesRowProps } from './types';
+import { ChangeCellControlPricesProps } from './types';
 import DefaultModal from '../../../../../../components/DefaultModal';
 import HorizontalContainer from '../../../../../../components/HorizontalContainer';
 import { Button } from '@consta/uikit/Button';
-import { CellsPricesRowDTO } from '../../../../../../types/serverInterface/serviceMenuDTO';
+import {
+  CellPriceDTO,
+  CellsPricesRowDTO,
+  ChangeCellsModeEnum,
+} from '../../../../../../types/serverInterface/serviceMenuDTO';
 import { useAppDispatch } from '../../../../../../app/hooks/store';
 import {
   backToServiceMenuAction,
+  changeCellPriceAction,
   changeCellsPricesRowAction,
 } from '../../../../../../state/serviceMenu/action';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@consta/uikit/TextField';
 import { getInputNumberValue } from '../../../../../../helpers/inputHelpers';
+import styles from './ChangeCellsControlPrice.module.scss';
 
 /**
- * Модальное окно для смены цены во всем ряду
+ * Модальное окно для изменения цены в ряду / ячейке
  */
-const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
+const ChangeCellsControlPrices: FC<ChangeCellControlPricesProps> = ({
   isOpen,
   row,
+  cell,
+  mode,
   onClose,
 }) => {
   const dispatch = useAppDispatch();
@@ -28,16 +36,32 @@ const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
   const [price, setPrice] = useState<number | null>(null);
 
   // Обработчики
-  const handleSubmitCellsPricesRow = () => {
-    if (price !== null) {
+  const handleSubmit = () => {
+    if (price === null) return;
+
+    if (mode === ChangeCellsModeEnum.ROW && row !== null) {
       const cellsPricesRow: CellsPricesRowDTO = {
-        row: row,
-        price: price,
+        row,
+        price,
       };
 
       dispatch(changeCellsPricesRowAction(cellsPricesRow))
         .then(() => dispatch(backToServiceMenuAction()))
-        .finally(() => {
+        .then(() => {
+          onClose();
+          navigate('/menu');
+        });
+    }
+
+    if (mode === ChangeCellsModeEnum.CELL && cell !== null) {
+      const cellPrice: CellPriceDTO = {
+        cellId: cell,
+        price: price,
+      };
+
+      dispatch(changeCellPriceAction(cellPrice))
+        .then(() => dispatch(backToServiceMenuAction()))
+        .then(() => {
           onClose();
           navigate('/menu');
         });
@@ -45,7 +69,7 @@ const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
   };
 
   const handleChangePrices = (value: string | null) => {
-    setPrice(Number(value));
+    setPrice(value ? Number(value) : null);
   };
 
   // render методы
@@ -64,14 +88,15 @@ const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
   const renderActions = () => (
     <HorizontalContainer space="m">
       <Button size="m" view="clear" label="Отменить" onClick={onClose} />
-      <Button size="m" view="primary" label="Сохранить" onClick={handleSubmitCellsPricesRow} />
+      <Button size="m" view="primary" label="Сохранить" onClick={handleSubmit} />
     </HorizontalContainer>
   );
 
   return (
     <DefaultModal
+      className={styles.ChangeCellsControlPrice}
       isOpen={isOpen}
-      modalTitle="Изменение цены ряда"
+      modalTitle="Изменить цену"
       renderActions={renderActions}
       onClose={onClose}
     >
@@ -80,4 +105,4 @@ const ChangeCellsControlPricesRow: FC<ChangeCellControlPricesRowProps> = ({
   );
 };
 
-export default ChangeCellsControlPricesRow;
+export default ChangeCellsControlPrices;

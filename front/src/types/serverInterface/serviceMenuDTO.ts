@@ -120,6 +120,11 @@ export type ServiceMenuPricesDTO = {
 };
 
 /**
+ * dto управление ячейками - товары
+ */
+export type ServiceMenuProductsDTO = ServiceMenuPricesDTO;
+
+/**
  * dto для смены цены в ряду
  */
 export type CellsPricesRowDTO = {
@@ -131,4 +136,128 @@ export type CellsPricesRowDTO = {
    * Цена
    */
   price: number;
+};
+
+/**
+ * dto для смены цены в ячейке
+ */
+export type CellPriceDTO = {
+  /**
+   * id ячейки
+   */
+  cellId: number;
+  /**
+   * Цена
+   */
+  price: number;
+};
+
+/**
+ * dto присвоения продукта ячейке
+ */
+export type ProductToCellDTO = {
+  /**
+   * Номер ячейки
+   */
+  cellId: number;
+  /**
+   * id продукта
+   */
+  productId: number;
+};
+
+/**
+ * dto присвоения продукта ряду
+ */
+export type ProductToRowDTO = {
+  /**
+   * Номер ряда
+   */
+  row: number;
+  /**
+   * id продукта
+   */
+  productId: number;
+  /**
+   * Объем
+   */
+  scope: 'all';
+};
+
+/**
+ * Режим изменения продуктов/цен
+ */
+export enum ChangeCellsModeEnum {
+  /**
+   * Ряд
+   */
+  ROW = 'ROW',
+  /**
+   * Ячейка
+   */
+  CELL = 'CELL',
+}
+
+export type ChangeCellsProducts = {
+  /**
+   * Номер ряда
+   */
+  row: number | null;
+  /**
+   * Номер ячейки
+   */
+  cell: number | null;
+  /**
+   * Режим изменения цен/продуктов
+   */
+  mode: ChangeCellsModeEnum | null;
+  /**
+   * Название продукта
+   */
+  productName: string | null;
+};
+
+/**
+ * Продукт из каталога
+ */
+export type OpenListItem = {
+  /**
+   * Путь до картинки
+   */
+  imgPath: string;
+  /**
+   * id продукта
+   */
+  id: number;
+  /**
+   * Название продукта
+   */
+  name: string;
+};
+
+/**
+ * Массив продукта из каталога
+ */
+export type OpenProductListDTO = {
+  /**
+   * Мета информация
+   */
+  meta: Meta;
+  /**
+   * Состояние
+   */
+  state: string;
+  /**
+   * Вид
+   */
+  view: {
+    /**
+     * Список ячеек
+     */
+    products: OpenListItem[];
+    /**
+     * Название экрана
+     */
+    screen: string;
+  };
 };
