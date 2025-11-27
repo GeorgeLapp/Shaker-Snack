@@ -1,3 +1,5 @@
+$cellWrapperMobileMinWidth: 100px;
+
 .gridTable {
   flex-direction: column;
 
@@ -39,11 +41,12 @@
   padding: var(--space-xs) var(--space-2xs);
 
   background-color: var(--bg-main-tertriary);
+
+  overflow-x: scroll;
+  scrollbar-width: none;
 }
 
-.gridCell {
-  align-items: flex-start;
-  justify-content: center;
-
-  display: flex;
+.cellWrapper {
+  min-width: $cellWrapperMobileMinWidth;
+  width: 100%;
 }

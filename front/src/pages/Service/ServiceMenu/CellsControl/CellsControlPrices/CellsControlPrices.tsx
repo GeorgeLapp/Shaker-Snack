@@ -10,8 +10,11 @@ import GridTable from '../../../../../components/GridTable';
 import ContentCard from '../../../../../components/ContentCard';
 import styles from './CellsControlPrices.module.scss';
 import { useCellsControlPrices } from './useCellsControlPrices';
-import { CellPrice } from '../../../../../types/serverInterface/serviceMenuDTO';
-import ChangeCellsControlPricesRow from './ChangeCellsControlPricesRow';
+import {
+  CellPrice,
+  ChangeCellsModeEnum,
+} from '../../../../../types/serverInterface/serviceMenuDTO';
+import ChangeCellsControlPrices from './ChangeCellsControlPrices';
 
 const cellGap = 7.2;
 const rowGap = 12;
@@ -26,6 +29,8 @@ const CellsControlPrices: FC = () => {
   const { cellsPricesRows, isRejectCellsPrices } = useCellsControlPrices();
 
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedCell, setSelectedCell] = useState<number | null>(null);
+  const [changeMode, setChangeMode] = useState<ChangeCellsModeEnum | null>(null);
   const [isChangeCellsPricesOpen, setIsChangeCellsPricesOpen] = useState(false);
 
   useEffect(() => {
@@ -33,13 +38,24 @@ const CellsControlPrices: FC = () => {
   }, [dispatch]);
 
   // Обработчики
-  const handleChangeCellsPricesRowOpen = (index: number) => {
-    setSelectedRow(index);
+  const handleChangeCellsPricesRowOpen = (rowIndex: number) => {
+    setSelectedRow(rowIndex);
+    setSelectedCell(null);
+    setChangeMode(ChangeCellsModeEnum.ROW);
+    setIsChangeCellsPricesOpen(true);
+  };
+
+  const handleChangeCellPriceOpen = (cellId: number) => {
+    setSelectedCell(cellId);
+    setSelectedRow(null);
+    setChangeMode(ChangeCellsModeEnum.CELL);
     setIsChangeCellsPricesOpen(true);
   };
 
   const handleChangeCellsPricesRowClose = () => {
     setSelectedRow(null);
+    setSelectedCell(null);
+    setChangeMode(null);
     setIsChangeCellsPricesOpen(false);
   };
 
@@ -82,7 +98,10 @@ const CellsControlPrices: FC = () => {
   };
 
   const renderCellPrice = (cell: CellPrice) => (
-    <ContentCard className={styles.priceCellCard}>
+    <ContentCard
+      className={styles.priceCellCard}
+      onClick={() => handleChangeCellPriceOpen(cell.id)}
+    >
       <Text size="s" weight="semibold" view="system">
         {cell.price} ₽
       </Text>
@@ -125,10 +144,13 @@ const CellsControlPrices: FC = () => {
   );
 
   const renderModal = () =>
-    selectedRow !== null && (
-      <ChangeCellsControlPricesRow
+    isChangeCellsPricesOpen &&
+    changeMode && (
+      <ChangeCellsControlPrices
         isOpen={isChangeCellsPricesOpen}
         row={selectedRow}
+        cell={selectedCell}
+        mode={changeMode}
         onClose={handleChangeCellsPricesRowClose}
       />
     );

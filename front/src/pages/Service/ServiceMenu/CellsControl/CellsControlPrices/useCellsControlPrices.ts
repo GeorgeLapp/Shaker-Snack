@@ -3,7 +3,7 @@ import { selectCellsPrices } from '../../../../../state/serviceMenu/selectors';
 import { useMemo } from 'react';
 
 /**
- * Хук для преобразования цен ячеек
+ * Хук для преобразования ячеек с ценами
  */
 export const useCellsControlPrices = () => {
   const { state: cellsPrices, isReject: isRejectCellsPrices } = useAppSelector(selectCellsPrices());

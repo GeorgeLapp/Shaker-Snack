@@ -1,7 +1,7 @@
 $cellNumberCardHeight: 24px;
 $cardSize: 100px;
 
-.CellsControlPrices {
+.CellsControlProducts {
   .cellNumberCard {
     min-width: $cardSize;
     width: 100%;
@@ -17,9 +17,10 @@ $cardSize: 100px;
     min-width: $cardSize;
     width: 100%;
     height: $cardSize;
-    border-radius: 0;
+    border-radius: 0 0 var(--control-radius-m) var(--control-radius-m);
     border-right: 1px solid var(--bg-main-quaternary);
     border-left: 1px solid var(--bg-main-quaternary);
+    border-bottom: 1px solid var(--bg-main-quaternary);
     padding: 0;
 
     background: var(--bg-main-brand);
@@ -28,19 +29,10 @@ $cardSize: 100px;
       min-width: $cardSize;
       max-width: 100%;
       height: $cardSize;
+      border-radius: 0 0 calc(var(--control-radius-m) - 1px) calc(var(--control-radius-m) - 1px);
 
       overflow: hidden;
     }
-  }
-
-  .priceCellCard {
-    min-width: $cardSize;
-    box-sizing: border-box;
-    border-radius: 0 0 var(--control-radius-s) var(--control-radius-s);
-    height: $cellNumberCardHeight;
-    padding: var(--space-3xs) var(--space-xs);
-
-    background: var(--bg-main-quaternary);
   }
 
   .productNameText {

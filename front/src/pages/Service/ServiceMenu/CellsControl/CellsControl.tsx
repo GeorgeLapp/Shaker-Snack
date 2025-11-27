@@ -15,6 +15,7 @@ import CellsControlPrices from './CellsControlPrices';
 import { backToServiceMenuAction } from '../../../../state/serviceMenu/action';
 import { useAppDispatch } from '../../../../app/hooks/store';
 import { cellControlTabs } from './const';
+import CellsControlProducts from './CellsControlProducts';
 
 /**
  * Управление ячейками
@@ -61,7 +62,7 @@ const CellsControl: FC = () => {
         <Text size="3xl" weight="semibold" view="secondary">
           Настройки
         </Text>
-        <IconArrowRight />
+        <IconArrowRight size="m" />
         <Text size="3xl" weight="semibold">
           Управление ячейками
         </Text>
@@ -80,6 +81,8 @@ const CellsControl: FC = () => {
     switch (selectedCellControlTab) {
       case CellControlEnum.PRICES:
         return <CellsControlPrices />;
+      case CellControlEnum.PRODUCTS:
+        return <CellsControlProducts />;
       default:
         return;
     }
