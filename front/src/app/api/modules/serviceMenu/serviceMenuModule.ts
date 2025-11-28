@@ -3,13 +3,17 @@ import { serviceMenuBaseUrl } from '../../../../consts/env';
 import {
   CellPriceDTO,
   CellsPricesRowDTO,
+  ChangeCellsTypeDTO,
+  MergeCellsDTO,
   OpenProductListDTO,
   Pin,
   ProductToCellDTO,
   ProductToRowDTO,
   ServiceMenuAuthorizationDTO,
+  ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
+  TurnOnOffCellsDTO,
 } from '../../../../types/serverInterface/serviceMenuDTO';
 
 export class ServiceMenuModule extends AbstractApiModule {
@@ -35,7 +39,9 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Получение конфига ячеек
    */
   getCellsConfig() {
-    return this.request.post(`${serviceMenuBaseUrl}/bff/ui/nav/cells-config`);
+    return this.request.post<undefined, ServiceMenuConfigDTO>(
+      `${serviceMenuBaseUrl}/bff/ui/nav/cells-config`,
+    );
   }
 
   /**
@@ -109,6 +115,36 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<ProductToRowDTO, undefined>(
       `${serviceMenuBaseUrl}/bff/products/assign-row`,
       productToRow,
+    );
+  }
+
+  /**
+   * Включение/выключение ячеек
+   */
+  turnOnOffCells(turnOnOffCells: TurnOnOffCellsDTO) {
+    return this.request.post<TurnOnOffCellsDTO, undefined>(
+      `${serviceMenuBaseUrl}/bff/cells/status`,
+      turnOnOffCells,
+    );
+  }
+
+  /**
+   * Объединение ячеек
+   */
+  mergeCells(mergeCells: MergeCellsDTO) {
+    return this.request.post<MergeCellsDTO, undefined>(
+      `${serviceMenuBaseUrl}/bff/cells/merge`,
+      mergeCells,
+    );
+  }
+
+  /**
+   * Изменение типа ячеек
+   */
+  changeCellsType(cellsType: ChangeCellsTypeDTO) {
+    return this.request.post<ChangeCellsTypeDTO, undefined>(
+      `${serviceMenuBaseUrl}/bff/cells/type`,
+      cellsType,
     );
   }
 

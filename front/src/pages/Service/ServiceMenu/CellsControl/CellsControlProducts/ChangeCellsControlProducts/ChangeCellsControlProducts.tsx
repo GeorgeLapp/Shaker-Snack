@@ -166,7 +166,6 @@ export const ChangeCellsControlProducts: FC = () => {
           alt="product image"
           loading="lazy"
           decoding="async"
-          onError={(e) => (e.currentTarget.src = '/images/placeholder.png')}
         />
       </ContentCard>
     );

@@ -1,24 +1,30 @@
 import { AppDispatch } from '../../app/store';
 import {
   assignProductToCellThunk,
-  assignProductToRow,
+  assignProductToRowThunk,
   authSubmitPinThunk,
   backToServiceMenuThunk,
   changeCellPriceThunk,
   changeCellsPricesRowThunk,
+  changeCellsTypeThunk,
   getCellsConfigThunk,
   getCellsPricesThunk,
   getCellsProductsThunk,
   getCellsStocksThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
+  mergeCellsThunk,
+  turnOnOffCellsThunk,
 } from './thunk';
 import {
   CellPriceDTO,
   CellsPricesRowDTO,
+  ChangeCellsTypeDTO,
+  MergeCellsDTO,
   Pin,
   ProductToCellDTO,
   ProductToRowDTO,
+  TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
 /**
@@ -89,7 +95,27 @@ export const assignProductToCellAction =
  */
 export const assignProductToRowAction =
   (productToRow: ProductToRowDTO) => (dispatch: AppDispatch) =>
-    dispatch(assignProductToRow(productToRow));
+    dispatch(assignProductToRowThunk(productToRow));
+
+/**
+ * Включение/выключение ячеек
+ */
+export const turnOnOffCellsAction =
+  (turnOnOffCells: TurnOnOffCellsDTO) => (dispatch: AppDispatch) =>
+    dispatch(turnOnOffCellsThunk(turnOnOffCells));
+
+/**
+ * Объединение ячеек
+ */
+export const mergeCellsAction = (mergeCells: MergeCellsDTO) => (dispatch: AppDispatch) =>
+  dispatch(mergeCellsThunk(mergeCells));
+
+/**
+ * Изменение типа ячеек
+ */
+export const changeCellsTypeAction =
+  (changeCellsType: ChangeCellsTypeDTO) => (dispatch: AppDispatch) =>
+    dispatch(changeCellsTypeThunk(changeCellsType));
 
 /**
  * Переход к сервисному меню

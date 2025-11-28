@@ -11,6 +11,7 @@ import {
 import {
   ChangeCellsProducts,
   OpenProductListDTO,
+  ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
@@ -23,10 +24,10 @@ type StateItemType<T> = {
 
 export type ServiceMenuState = {
   openSettings: StateItemType<any>;
-  cellsConfig: StateItemType<any>;
   cellsStocks: StateItemType<any>;
   cellsPrices: StateItemType<ServiceMenuPricesDTO>;
   cellsProducts: StateItemType<ServiceMenuProductsDTO>;
+  cellsConfig: StateItemType<ServiceMenuConfigDTO>;
   openProductsList: StateItemType<OpenProductListDTO>;
   changeCellsProducts: ChangeCellsProducts;
   notifications: NotificationType[];
@@ -34,11 +35,6 @@ export type ServiceMenuState = {
 
 const initialState: ServiceMenuState = {
   openSettings: {
-    state: null,
-    isLoading: false,
-    isReject: false,
-  },
-  cellsConfig: {
     state: null,
     isLoading: false,
     isReject: false,
@@ -59,6 +55,15 @@ const initialState: ServiceMenuState = {
   },
   cellsProducts: {
     state: null,
+    isLoading: false,
+    isReject: false,
+  },
+  cellsConfig: {
+    state: {
+      meta: {},
+      state: '',
+      view: { cells: [], screen: '' },
+    },
     isLoading: false,
     isReject: false,
   },
@@ -130,7 +135,7 @@ const serviceMenuSlice = createSlice({
     builder.addCase(getCellsConfigThunk.fulfilled, (state, action) => {
       state.cellsConfig.isLoading = false;
       state.cellsConfig.state = action.payload;
-      state.cellsConfig.isReject = false;
+      state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsConfigThunk.rejected, (state) => {
