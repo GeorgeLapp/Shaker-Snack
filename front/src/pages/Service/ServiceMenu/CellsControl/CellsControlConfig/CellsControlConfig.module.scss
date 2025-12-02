@@ -8,6 +8,10 @@ $cardSize: 100px;
     background: var(--bg-main-secondary);
   }
 
+  .rowContentClassName {
+    background-color: var(--bg-main-secondary);
+  }
+
   .cellNumberCard {
     min-width: $cardSize;
     width: 100%;
@@ -18,8 +22,15 @@ $cardSize: 100px;
 
     background: var(--bg-main-quaternary);
 
+    .iconPowerOff {
+      width: var(--space-l);
+      height: var(--space-l);
+
+      color: var(--typo-status-alert)
+    }
+
     &.isSelected {
-      background: var(--control-default-border-border-active);
+      background: var(--control-primary-bg-bg);
     }
   }
 
@@ -35,8 +46,8 @@ $cardSize: 100px;
     background: var(--bg-main-brand);
 
     &.isSelected {
-      border-right: 1px solid var(--control-default-border-border-active);
-      border-left: 1px solid var(--control-default-border-border-active);
+      border-right: 1px solid var(--control-primary-bg-bg);
+      border-left: 1px solid var(--control-primary-bg-bg);
     }
 
     .img {
@@ -58,7 +69,15 @@ $cardSize: 100px;
     background: var(--bg-main-quaternary);
 
     &.isSelected {
-      background: var(--control-default-border-border-active);
+      background: var(--control-primary-bg-bg);
+    }
+
+    .icon {
+      color: var(--typo-main-primary);
+
+      &.isSelected {
+        color: var(--control-primary-typo-typo);
+      }
     }
   }
 }

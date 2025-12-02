@@ -36,7 +36,7 @@ const CellsControl: FC = () => {
   };
 
   const handleTabClick = (value: CellControlEnum) => {
-    setSelectedCellControlTab(value);
+    dispatch(backToServiceMenuAction()).then(() => setSelectedCellControlTab(value));
   };
 
   const tabsList = useMemo<TabProps[]>(

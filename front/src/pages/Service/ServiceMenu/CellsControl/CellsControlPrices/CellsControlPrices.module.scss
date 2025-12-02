@@ -2,6 +2,10 @@ $cellNumberCardHeight: 24px;
 $cardSize: 100px;
 
 .CellsControlPrices {
+  .rowContentClassName {
+    background-color: var(--bg-main-secondary);
+  }
+
   .cellNumberCard {
     min-width: $cardSize;
     width: 100%;

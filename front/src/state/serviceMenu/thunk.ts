@@ -158,3 +158,10 @@ export const changeCellsTypeThunk = createAsyncThunk<undefined, ChangeCellsTypeD
 export const backToServiceMenuThunk = createAsyncThunk('backToServiceMenu', async () => {
   return await api.serviceMenu.backToServiceMenu();
 });
+
+/**
+ * Повтор после ошибки
+ */
+export const retryThunk = createAsyncThunk('retry', async () => {
+  return await api.serviceMenu.retry();
+});

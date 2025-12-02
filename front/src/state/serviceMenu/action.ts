@@ -14,6 +14,7 @@ import {
   getOpenProductsListThunk,
   getOpenSettingsThunk,
   mergeCellsThunk,
+  retryThunk,
   turnOnOffCellsThunk,
 } from './thunk';
 import {
@@ -122,3 +123,8 @@ export const changeCellsTypeAction =
  */
 export const backToServiceMenuAction = () => (dispatch: AppDispatch) =>
   dispatch(backToServiceMenuThunk());
+
+/**
+ * Повтор после ошибки
+ */
+export const retryAction = () => (dispatch: AppDispatch) => dispatch(retryThunk());

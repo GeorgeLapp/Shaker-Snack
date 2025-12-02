@@ -135,7 +135,7 @@ const serviceMenuSlice = createSlice({
     builder.addCase(getCellsConfigThunk.fulfilled, (state, action) => {
       state.cellsConfig.isLoading = false;
       state.cellsConfig.state = action.payload;
-      state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
+      state.cellsConfig.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsConfigThunk.rejected, (state) => {
@@ -186,7 +186,7 @@ const serviceMenuSlice = createSlice({
     builder.addCase(getCellsProductsThunk.fulfilled, (state, action) => {
       state.cellsProducts.isLoading = false;
       state.cellsProducts.state = action.payload;
-      state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
+      state.cellsProducts.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsProductsThunk.rejected, (state) => {

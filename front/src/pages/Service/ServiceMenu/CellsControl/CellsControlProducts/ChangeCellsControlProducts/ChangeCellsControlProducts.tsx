@@ -31,6 +31,7 @@ import {
   ProductToRowDTO,
 } from '../../../../../../types/serverInterface/serviceMenuDTO';
 import { resetChangeCellsProducts } from '../../../../../../state/serviceMenu/slice';
+import Error from '../../../../../../components/Error';
 
 const cellGap = 16;
 const rowContentHeight = 158;
@@ -44,9 +45,8 @@ export const ChangeCellsControlProducts: FC = () => {
   const navigate = useNavigate();
 
   const { mode, row, cell, productName } = useAppSelector(selectChangeCellsProducts());
-  const { state: openProductsList } = useAppSelector(selectOpenProductsList());
-
-  console.log(openProductsList);
+  const { state: openProductsList, isReject: isRejectOpenProductList } =
+    useAppSelector(selectOpenProductsList());
 
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -207,6 +207,10 @@ export const ChangeCellsControlProducts: FC = () => {
       </ContentCard>
     );
   };
+
+  const renderError = () => <Error />;
+
+  if (isRejectOpenProductList) return renderError();
 
   return (
     <VerticalContainer space="l" className={styles.ChangeCellsControlProducts}>

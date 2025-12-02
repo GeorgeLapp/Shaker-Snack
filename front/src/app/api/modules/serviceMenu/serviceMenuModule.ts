@@ -154,4 +154,11 @@ export class ServiceMenuModule extends AbstractApiModule {
   backToServiceMenu() {
     return this.request.post(`${serviceMenuBaseUrl}/bff/ui/back`);
   }
+
+  /**
+   * Повтор после ошибки
+   */
+  retry() {
+    return this.request.post(`${serviceMenuBaseUrl}/bff/ui/retry`);
+  }
 }
