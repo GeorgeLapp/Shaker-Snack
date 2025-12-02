@@ -65,7 +65,6 @@ const CellsControlStocks: FC = () => {
           loading="lazy"
           decoding="async"
           className={styles.img}
-          onError={(e) => (e.currentTarget.src = '/images/placeholder.png')}
         />
       </ContentCard>
     );

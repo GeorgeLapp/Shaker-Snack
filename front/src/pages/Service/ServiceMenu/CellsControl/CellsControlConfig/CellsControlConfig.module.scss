@@ -1,7 +1,13 @@
 $cellNumberCardHeight: 24px;
 $cardSize: 100px;
 
-.CellsControlPrices {
+.CellsControlConfig {
+  .contentCard {
+    padding: var(--space-xs) 0;
+
+    background: var(--bg-main-secondary);
+  }
+
   .rowContentClassName {
     background-color: var(--bg-main-secondary);
   }
@@ -14,7 +20,18 @@ $cardSize: 100px;
     box-sizing: border-box;
     padding: var(--space-3xs) var(--space-xs);
 
-    background: var(--bg-status-system);
+    background: var(--bg-main-quaternary);
+
+    .iconPowerOff {
+      width: var(--space-l);
+      height: var(--space-l);
+
+      color: var(--typo-status-alert)
+    }
+
+    &.isSelected {
+      background: var(--control-primary-bg-bg);
+    }
   }
 
   .mainPartCard {
@@ -27,6 +44,11 @@ $cardSize: 100px;
     padding: 0;
 
     background: var(--bg-main-brand);
+
+    &.isSelected {
+      border-right: 1px solid var(--control-primary-bg-bg);
+      border-left: 1px solid var(--control-primary-bg-bg);
+    }
 
     .img {
       min-width: $cardSize;
@@ -45,16 +67,17 @@ $cardSize: 100px;
     padding: var(--space-3xs) var(--space-xs);
 
     background: var(--bg-main-quaternary);
-  }
 
-  .productNameText {
-    min-width: $cardSize;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    &.isSelected {
+      background: var(--control-primary-bg-bg);
+    }
+
+    .icon {
+      color: var(--typo-main-primary);
+
+      &.isSelected {
+        color: var(--control-primary-typo-typo);
+      }
+    }
   }
 }

@@ -3,13 +3,17 @@ import { api } from '../../app/api';
 import {
   CellPriceDTO,
   CellsPricesRowDTO,
+  ChangeCellsTypeDTO,
+  MergeCellsDTO,
   OpenProductListDTO,
   Pin,
   ProductToCellDTO,
   ProductToRowDTO,
   ServiceMenuAuthorizationDTO,
+  ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
+  TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
 /**
@@ -34,9 +38,12 @@ export const authSubmitPinThunk = createAsyncThunk<ServiceMenuAuthorizationDTO, 
 /**
  * Получение конфига ячеек
  */
-export const getCellsConfigThunk = createAsyncThunk('getCellsConfig', async () => {
-  return await api.serviceMenu.getCellsConfig();
-});
+export const getCellsConfigThunk = createAsyncThunk<ServiceMenuConfigDTO, undefined>(
+  'getCellsConfig',
+  async () => {
+    return await api.serviceMenu.getCellsConfig();
+  },
+);
 
 /**
  * Получение остатков
@@ -108,10 +115,40 @@ export const assignProductToCellThunk = createAsyncThunk<undefined, ProductToCel
 /**
  *  Присвоение товара ряду
  */
-export const assignProductToRow = createAsyncThunk<undefined, ProductToRowDTO>(
+export const assignProductToRowThunk = createAsyncThunk<undefined, ProductToRowDTO>(
   'assignProductToRow',
   async (assignProductToRow) => {
     return await api.serviceMenu.assignProductToRow(assignProductToRow);
+  },
+);
+
+/**
+ * Включение/выключение ячеек
+ */
+export const turnOnOffCellsThunk = createAsyncThunk<undefined, TurnOnOffCellsDTO>(
+  'turnOnOffCells',
+  async (turnOnOffCells) => {
+    return await api.serviceMenu.turnOnOffCells(turnOnOffCells);
+  },
+);
+
+/**
+ * Объединение ячеек
+ */
+export const mergeCellsThunk = createAsyncThunk<undefined, MergeCellsDTO>(
+  'mergeCells',
+  async (mergeCells) => {
+    return await api.serviceMenu.mergeCells(mergeCells);
+  },
+);
+
+/**
+ * Изменение типа ячеек
+ */
+export const changeCellsTypeThunk = createAsyncThunk<undefined, ChangeCellsTypeDTO>(
+  'changeCellsType',
+  async (changeCellsType) => {
+    return await api.serviceMenu.changeCellsType(changeCellsType);
   },
 );
 
@@ -120,4 +157,11 @@ export const assignProductToRow = createAsyncThunk<undefined, ProductToRowDTO>(
  */
 export const backToServiceMenuThunk = createAsyncThunk('backToServiceMenu', async () => {
   return await api.serviceMenu.backToServiceMenu();
+});
+
+/**
+ * Повтор после ошибки
+ */
+export const retryThunk = createAsyncThunk('retry', async () => {
+  return await api.serviceMenu.retry();
 });

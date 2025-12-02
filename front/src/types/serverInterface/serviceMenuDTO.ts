@@ -9,6 +9,20 @@ export type Pin = {
 };
 
 /**
+ * Тип ячейки
+ */
+export enum CellTypeEnum {
+  /**
+   * Спираль
+   */
+  SPIRAL = 'spiral',
+  /**
+   * Конвейер
+   */
+  CONVEYOR = 'conveyor',
+}
+
+/**
  * Ячейка в списке ячеек с ценами
  */
 export type CellPrice = {
@@ -53,9 +67,9 @@ export type CellPrice = {
    */
   status: string;
   /**
-   * Тип
+   * Тип ячейки
    */
-  type: string;
+  type: CellTypeEnum;
 };
 
 /**
@@ -123,6 +137,11 @@ export type ServiceMenuPricesDTO = {
  * dto управление ячейками - товары
  */
 export type ServiceMenuProductsDTO = ServiceMenuPricesDTO;
+
+/**
+ * dto управление ячейками - конфиг
+ */
+export type ServiceMenuConfigDTO = ServiceMenuPricesDTO;
 
 /**
  * dto для смены цены в ряду
@@ -215,6 +234,58 @@ export type ChangeCellsProducts = {
    * Название продукта
    */
   productName: string | null;
+};
+
+/**
+ * Статус ячейки
+ */
+export enum CellStatusEnum {
+  /**
+   * Выключена
+   */
+  DISABLED = 'disabled',
+  /**
+   * Включена
+   */
+  ENABLED = 'enabled',
+}
+
+/**
+ * dto для включения/выключения ячеек
+ */
+export type TurnOnOffCellsDTO = {
+  /**
+   * Номера ячеек
+   */
+  cellsIds: number[];
+  /**
+   * Статус ячеек
+   */
+  status: CellStatusEnum;
+};
+
+/**
+ * dto для объединения ячеек
+ */
+export type MergeCellsDTO = {
+  /**
+   * Номера ячеек
+   */
+  cellsIds: number[];
+};
+
+/**
+ * dto для изменения типа ячейки
+ */
+export type ChangeCellsTypeDTO = {
+  /**
+   * Номера ячеек
+   */
+  cellsIds: number[];
+  /**
+   * Тип ячейки
+   */
+  type: CellTypeEnum;
 };
 
 /**

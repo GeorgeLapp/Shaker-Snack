@@ -16,6 +16,7 @@ import {
   CellPrice,
   ChangeCellsModeEnum,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
+import Error from '../../../../../components/Error';
 
 const cellGap = 7.2;
 const rowGap = 12;
@@ -29,7 +30,7 @@ const CellsControlProducts: FC = () => {
 
   const navigate = useNavigate();
 
-  const { cellsPricesRows } = useCellsControlProducts();
+  const { cellsPricesRows, isRejectCellsProducts } = useCellsControlProducts();
 
   useEffect(() => {
     dispatch(getCellsProductsAction());
@@ -94,7 +95,6 @@ const CellsControlProducts: FC = () => {
           alt="product image"
           loading="lazy"
           decoding="async"
-          onError={(e) => (e.currentTarget.src = '/images/placeholder.png')}
         />
       </ContentCard>
     );
@@ -119,6 +119,7 @@ const CellsControlProducts: FC = () => {
 
   const renderGridTable = () => (
     <GridTable
+      rowContentClassName={styles.rowContentClassName}
       data={cellsPricesRows || []}
       cellComponent={renderCell}
       rowContentHeight={rowContentHeight}
@@ -127,6 +128,10 @@ const CellsControlProducts: FC = () => {
       cellGap={cellGap}
     />
   );
+
+  const renderError = () => <Error />;
+
+  if (isRejectCellsProducts) return renderError();
 
   return (
     <VerticalContainer space="l" className={styles.CellsControlProducts}>

@@ -15,6 +15,7 @@ import {
   ChangeCellsModeEnum,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
 import ChangeCellsControlPrices from './ChangeCellsControlPrices';
+import Error from '../../../../../components/Error';
 
 const cellGap = 7.2;
 const rowGap = 12;
@@ -91,7 +92,6 @@ const CellsControlPrices: FC = () => {
           alt="product image"
           loading="lazy"
           decoding="async"
-          onError={(e) => (e.currentTarget.src = '/images/placeholder.png')}
         />
       </ContentCard>
     );
@@ -128,6 +128,7 @@ const CellsControlPrices: FC = () => {
 
   const renderPricesTable = () => (
     <GridTable
+      rowContentClassName={styles.rowContentClassName}
       data={cellsPricesRows}
       cellComponent={renderCell}
       rowContentHeight={rowContentHeight}
@@ -135,12 +136,6 @@ const CellsControlPrices: FC = () => {
       rowGap={rowGap}
       cellGap={cellGap}
     />
-  );
-
-  const renderError = () => (
-    <Text size="6xl" align="center">
-      Ошибка
-    </Text>
   );
 
   const renderModal = () =>
@@ -154,6 +149,8 @@ const CellsControlPrices: FC = () => {
         onClose={handleChangeCellsPricesRowClose}
       />
     );
+
+  const renderError = () => <Error />;
 
   if (isRejectCellsPrices) return renderError();
 

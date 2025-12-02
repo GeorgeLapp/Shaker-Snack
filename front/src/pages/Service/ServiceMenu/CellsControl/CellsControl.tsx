@@ -15,6 +15,7 @@ import CellsControlPrices from './CellsControlPrices';
 import { backToServiceMenuAction } from '../../../../state/serviceMenu/action';
 import { useAppDispatch } from '../../../../app/hooks/store';
 import { cellControlTabs } from './const';
+import CellsControlConfig from './CellsControlConfig';
 import CellsControlProducts from './CellsControlProducts';
 
 /**
@@ -35,7 +36,7 @@ const CellsControl: FC = () => {
   };
 
   const handleTabClick = (value: CellControlEnum) => {
-    setSelectedCellControlTab(value);
+    dispatch(backToServiceMenuAction()).then(() => setSelectedCellControlTab(value));
   };
 
   const tabsList = useMemo<TabProps[]>(
@@ -83,6 +84,8 @@ const CellsControl: FC = () => {
         return <CellsControlPrices />;
       case CellControlEnum.PRODUCTS:
         return <CellsControlProducts />;
+      case CellControlEnum.CONFIG:
+        return <CellsControlConfig />;
       default:
         return;
     }
