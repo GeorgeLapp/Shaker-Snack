@@ -45,7 +45,6 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<undefined, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-config`,
     );
-    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
@@ -62,7 +61,6 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<undefined, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-prices`,
     );
-    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
@@ -72,7 +70,6 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<undefined, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-products`,
     );
-    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
@@ -82,7 +79,6 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<undefined, DiagnosticsTestDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`,
     );
-    // return getDataFromServer(mockCells);
   }
 
   /**
