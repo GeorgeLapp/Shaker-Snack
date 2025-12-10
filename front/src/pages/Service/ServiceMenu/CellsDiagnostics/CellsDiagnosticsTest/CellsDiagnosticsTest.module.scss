@@ -1,16 +1,11 @@
 $cellNumberCardHeight: 24px;
 $cardSize: 100px;
 
-.CellsControlConfig {
-  .contentCard {
-    padding: var(--space-xs) 0;
+.CellsDiagnosticsTest {
+  .actionsCard {
+    padding: var(--space-m);
 
     background: var(--bg-main-secondary);
-
-    .button {
-      width: 64px;
-      height: 64px;
-    }
   }
 
   .rowContentClassName {
@@ -23,13 +18,10 @@ $cardSize: 100px;
     box-sizing: border-box;
     padding: var(--space-3xs) var(--space-xs);
 
-    background: var(--bg-main-quaternary);
+    background: var(--bg-status-system);
 
-    .iconPowerOff {
-      width: var(--space-l);
-      height: var(--space-l);
-
-      color: var(--typo-status-alert)
+    .text {
+      white-space: nowrap;
     }
 
     &.isSelected {
@@ -44,25 +36,23 @@ $cardSize: 100px;
     border-left: 1px solid var(--bg-main-quaternary);
     padding: 0;
 
+    overflow: hidden;
+
     background: var(--bg-main-brand);
 
-    overflow: hidden;
+    .img {
+      height: $cardSize;
+
+      overflow: hidden;
+    }
 
     &.isSelected {
       border-right: 1px solid var(--control-primary-bg-bg);
       border-left: 1px solid var(--control-primary-bg-bg);
     }
-
-    .img {
-      min-width: $cardSize;
-      max-width: 100%;
-      height: $cardSize;
-
-      overflow: hidden;
-    }
   }
 
-  .priceCellCard {
+  .motorCellCard {
     box-sizing: border-box;
     border-radius: 0 0 var(--control-radius-s) var(--control-radius-s);
     height: $cellNumberCardHeight;
@@ -70,16 +60,12 @@ $cardSize: 100px;
 
     background: var(--bg-main-quaternary);
 
-    &.isSelected {
-      background: var(--control-primary-bg-bg);
+    .iconQuestion {
+      color: var(--typo-main-secondary)
     }
 
-    .icon {
-      color: var(--control-clear-typo-typo);
-
-      &.isSelected {
-        color: var(--control-primary-typo-typo);
-      }
+    &.isSelected {
+      background: var(--control-primary-bg-bg);
     }
   }
 }

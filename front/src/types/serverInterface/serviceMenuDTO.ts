@@ -65,11 +65,21 @@ export type CellPrice = {
   /**
    * Статус
    */
-  status: string;
+  status: CellStatusEnum;
   /**
    * Тип ячейки
    */
   type: CellTypeEnum;
+};
+
+/**
+ * Ячейка в списке ячеек с диагностикой
+ */
+export type CellDiagnostics = CellPrice & {
+  /**
+   * id моторов
+   */
+  motorIds: number[];
 };
 
 /**
@@ -182,7 +192,7 @@ export type ProductToCellDTO = {
   /**
    * id продукта
    */
-  productId: number;
+  productId: number | null;
 };
 
 /**
@@ -289,6 +299,21 @@ export type ChangeCellsTypeDTO = {
 };
 
 /**
+ * dto для теста ячеек
+ */
+export type RunDiagnosticsDTO = {
+  /**
+   * Номера ячеек
+   */
+  cellsIds: number[];
+};
+
+/**
+ * dto для перезапуска теста ячеек
+ */
+export type RerunDiagnosticsDTO = RunDiagnosticsDTO;
+
+/**
  * Продукт из каталога
  */
 export type OpenListItem = {
@@ -326,6 +351,33 @@ export type OpenProductListDTO = {
      * Список ячеек
      */
     products: OpenListItem[];
+    /**
+     * Название экрана
+     */
+    screen: string;
+  };
+};
+
+/**
+ * dto диагностика - тест ячеек
+ */
+export type DiagnosticsTestDTO = {
+  /**
+   * Мета информация
+   */
+  meta: Meta;
+  /**
+   * Состояние
+   */
+  state: string;
+  /**
+   * Вид
+   */
+  view: {
+    /**
+     * Список ячеек
+     */
+    cells: CellDiagnostics[];
     /**
      * Название экрана
      */

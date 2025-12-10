@@ -1,9 +1,7 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../../../../app/hooks/store';
 import {
-  backToServiceMenuAction,
   changeCellsTypeAction,
-  getCellsConfigAction,
   mergeCellsAction,
   turnOnOffCellsAction,
 } from '../../../../../state/serviceMenu/action';
@@ -48,13 +46,6 @@ const CellsControlConfig: FC = () => {
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    dispatch(getCellsConfigAction());
-  }, [dispatch]);
-
-  /**
-   * Данные по выделенным ячейкам
-   */
   const selectedCellsData = useMemo<CellPrice[]>(() => {
     if (!selectedCells.length || !cellsConfigRows.length) return [];
 
@@ -149,13 +140,10 @@ const CellsControlConfig: FC = () => {
       type,
     };
 
-    dispatch(changeCellsTypeAction(changeCellsType))
-      .then(() => {
-        setSelectedCells([]);
-        setSelectedRowIndex(null);
-      })
-      .then(() => dispatch(backToServiceMenuAction()))
-      .then(() => dispatch(getCellsConfigAction()));
+    dispatch(changeCellsTypeAction(changeCellsType)).then(() => {
+      setSelectedCells([]);
+      setSelectedRowIndex(null);
+    });
   };
 
   const handleTurnOnOffCells = (status: CellStatusEnum) => {
@@ -174,13 +162,10 @@ const CellsControlConfig: FC = () => {
       status,
     };
 
-    dispatch(turnOnOffCellsAction(turnOnOffCells))
-      .then(() => {
-        setSelectedCells([]);
-        setSelectedRowIndex(null);
-      })
-      .then(() => dispatch(backToServiceMenuAction()))
-      .then(() => dispatch(getCellsConfigAction()));
+    dispatch(turnOnOffCellsAction(turnOnOffCells)).then(() => {
+      setSelectedCells([]);
+      setSelectedRowIndex(null);
+    });
   };
 
   const handleMergeCells = () => {
@@ -190,32 +175,39 @@ const CellsControlConfig: FC = () => {
       cellsIds: selectedCells,
     };
 
-    dispatch(mergeCellsAction(mergeCells))
-      .then(() => {
-        setSelectedCells([]);
-        setSelectedRowIndex(null);
-      })
-      .then(() => dispatch(backToServiceMenuAction()))
-      .then(() => dispatch(getCellsConfigAction()));
+    dispatch(mergeCellsAction(mergeCells)).then(() => {
+      setSelectedCells([]);
+      setSelectedRowIndex(null);
+    });
   };
 
   // render методы
   const renderTurnCellsOnOffCard = () => (
     <ContentCard className={styles.contentCard}>
-      <VerticalContainer space="xs">
+      <VerticalContainer space="xs" align="center" isAutoWidth>
         <Text size="l" weight="medium">
           Объединение
         </Text>
-        <HorizontalContainer space="s">
+        <HorizontalContainer space="s" align="center">
           <Button
+            className={styles.button}
             disabled={!canMergeSelected}
             onlyIcon
             size="l"
+            iconSize="l"
             view="clear"
             iconLeft={IconUnite}
             onClick={handleMergeCells}
           />
-          <Button disabled onlyIcon size="l" view="clear" iconLeft={IconDivide} />
+          <Button
+            className={styles.button}
+            disabled
+            onlyIcon
+            size="l"
+            iconSize="l"
+            view="clear"
+            iconLeft={IconDivide}
+          />
         </HorizontalContainer>
       </VerticalContainer>
     </ContentCard>
@@ -223,23 +215,27 @@ const CellsControlConfig: FC = () => {
 
   const renderChangeCellsTypeCard = () => (
     <ContentCard className={styles.contentCard}>
-      <VerticalContainer space="xs">
+      <VerticalContainer space="xs" align="center" isAutoWidth>
         <Text size="l" weight="medium">
           Тип ячейки
         </Text>
-        <HorizontalContainer space="s">
+        <HorizontalContainer space="s" align="center">
           <Button
+            className={styles.button}
             disabled={selectedCells.length === 0 || hasDisabledSelected}
             onlyIcon
             size="l"
+            iconSize="l"
             view="clear"
             iconLeft={IconSpring}
             onClick={() => handleChangeCellsType(CellTypeEnum.SPIRAL)}
           />
           <Button
+            className={styles.button}
             disabled={selectedCells.length === 0 || hasDisabledSelected}
             onlyIcon
             size="l"
+            iconSize="l"
             view="clear"
             iconLeft={IconLineConveyor}
             onClick={() => handleChangeCellsType(CellTypeEnum.CONVEYOR)}
@@ -251,23 +247,27 @@ const CellsControlConfig: FC = () => {
 
   const renderPowerCellsOnOffCard = () => (
     <ContentCard className={styles.contentCard}>
-      <VerticalContainer space="xs">
+      <VerticalContainer space="xs" align="center" isAutoWidth>
         <Text size="l" weight="medium">
           Вкл/Выкл
         </Text>
-        <HorizontalContainer space="s">
+        <HorizontalContainer space="s" align="center">
           <Button
+            className={styles.button}
             disabled={!canEnable}
             onlyIcon
             size="l"
+            iconSize="l"
             view="clear"
             iconLeft={IconPowerOn}
             onClick={() => handleTurnOnOffCells(CellStatusEnum.ENABLED)}
           />
           <Button
+            className={styles.button}
             disabled={!canDisable}
             onlyIcon
             size="l"
+            iconSize="l"
             view="clear"
             iconLeft={IconPowerOff}
             onClick={() => handleTurnOnOffCells(CellStatusEnum.DISABLED)}
@@ -287,7 +287,7 @@ const CellsControlConfig: FC = () => {
 
   const renderRowTitle = (index: number) => (
     <HorizontalContainer isAutoWidth isAutoSpace>
-      <Text>{index} ряд</Text>
+      <Text>{index} полка</Text>
       <Button
         label="Выбрать всю полку"
         size="s"
@@ -339,11 +339,7 @@ const CellsControlConfig: FC = () => {
     const isSelected = selectedCells.includes(data.id);
 
     return (
-      <VerticalContainer
-        space={0}
-        onClick={() => handleCellClick(data, rowIndex)}
-        className={classNames(isSelected && styles.cellWrapperSelected)}
-      >
+      <VerticalContainer space={0} onClick={() => handleCellClick(data, rowIndex)}>
         {renderCellNumber(data, isSelected)}
         {renderCellPlaceholder(data, isSelected)}
         {renderCellType(data, isSelected)}
@@ -360,6 +356,7 @@ const CellsControlConfig: FC = () => {
       getRowTitle={renderRowTitle}
       rowGap={rowGap}
       cellGap={cellGap}
+      layout="fit"
     />
   );
 

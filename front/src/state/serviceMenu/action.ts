@@ -11,10 +11,13 @@ import {
   getCellsPricesThunk,
   getCellsProductsThunk,
   getCellsStocksThunk,
+  getCellsTestThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
   mergeCellsThunk,
+  rerunDiagnosticsThunk,
   retryThunk,
+  runDiagnosticsThunk,
   turnOnOffCellsThunk,
 } from './thunk';
 import {
@@ -25,6 +28,8 @@ import {
   Pin,
   ProductToCellDTO,
   ProductToRowDTO,
+  RerunDiagnosticsDTO,
+  RunDiagnosticsDTO,
   TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
@@ -64,6 +69,11 @@ export const getCellsPricesAction = () => (dispatch: AppDispatch) =>
  */
 export const getCellsProductsAction = () => (dispatch: AppDispatch) =>
   dispatch(getCellsProductsThunk());
+
+/**
+ * Получение диагностики ячеек
+ */
+export const getCellsTestAction = () => (dispatch: AppDispatch) => dispatch(getCellsTestThunk());
 
 /**
  * Изменение цены во всем ряду
@@ -117,6 +127,20 @@ export const mergeCellsAction = (mergeCells: MergeCellsDTO) => (dispatch: AppDis
 export const changeCellsTypeAction =
   (changeCellsType: ChangeCellsTypeDTO) => (dispatch: AppDispatch) =>
     dispatch(changeCellsTypeThunk(changeCellsType));
+
+/**
+ * Тест ячеек
+ */
+export const runDiagnosticsAction =
+  (runDiagnostics: RunDiagnosticsDTO) => (dispatch: AppDispatch) =>
+    dispatch(runDiagnosticsThunk(runDiagnostics));
+
+/**
+ * Тест ячеек
+ */
+export const rerunDiagnosticsAction =
+  (rerunDiagnostics: RerunDiagnosticsDTO) => (dispatch: AppDispatch) =>
+    dispatch(rerunDiagnosticsThunk(rerunDiagnostics));
 
 /**
  * Переход к сервисному меню
