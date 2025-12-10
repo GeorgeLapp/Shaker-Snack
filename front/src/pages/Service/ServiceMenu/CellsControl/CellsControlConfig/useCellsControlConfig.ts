@@ -1,11 +1,14 @@
-import { useAppSelector } from '../../../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks/store';
 import { selectCellsConfig } from '../../../../../state/serviceMenu/selectors';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { getCellsConfigAction } from '../../../../../state/serviceMenu/action';
 
 /**
  * Хук для преобразования ячеек для конфига
  */
 export const useCellsControlConfig = () => {
+  const dispatch = useAppDispatch();
+
   const { state: cellsConfig, isReject: isRejectCellsConfig } = useAppSelector(selectCellsConfig());
 
   const cellsConfigRows = useMemo(() => {
@@ -25,5 +28,9 @@ export const useCellsControlConfig = () => {
     return rows;
   }, [cellsConfig]);
 
-  return { cellsConfigRows, isRejectCellsConfig };
+  useEffect(() => {
+    dispatch(getCellsConfigAction());
+  }, [dispatch]);
+
+  return { cellsConfigRows, isRejectCellsConfig: isRejectCellsConfig };
 };

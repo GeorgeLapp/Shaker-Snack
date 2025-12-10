@@ -1,20 +1,30 @@
 import { errorHandler, NotificationType } from '../handlers';
 import { createSlice, isRejected, PayloadAction } from '@reduxjs/toolkit';
 import {
+  assignProductToCellThunk,
+  assignProductToRowThunk,
+  changeCellPriceThunk,
+  changeCellsPricesRowThunk,
+  changeCellsTypeThunk,
   getCellsConfigThunk,
   getCellsPricesThunk,
   getCellsProductsThunk,
   getCellsStocksThunk,
+  getCellsTestThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
+  mergeCellsThunk,
+  turnOnOffCellsThunk,
 } from './thunk';
 import {
   ChangeCellsProducts,
+  DiagnosticsTestDTO,
   OpenProductListDTO,
   ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
+import { CellControlEnum } from '../../pages/Service/ServiceMenu/CellsControl/types';
 
 type StateItemType<T> = {
   state: T extends [] ? T : T | null;
@@ -23,17 +33,20 @@ type StateItemType<T> = {
 };
 
 export type ServiceMenuState = {
+  selectedCellControlTab: CellControlEnum;
   openSettings: StateItemType<any>;
   cellsStocks: StateItemType<any>;
   cellsPrices: StateItemType<ServiceMenuPricesDTO>;
   cellsProducts: StateItemType<ServiceMenuProductsDTO>;
   cellsConfig: StateItemType<ServiceMenuConfigDTO>;
+  cellsTest: StateItemType<DiagnosticsTestDTO>;
   openProductsList: StateItemType<OpenProductListDTO>;
   changeCellsProducts: ChangeCellsProducts;
   notifications: NotificationType[];
 };
 
 const initialState: ServiceMenuState = {
+  selectedCellControlTab: CellControlEnum.PRICES,
   openSettings: {
     state: null,
     isLoading: false,
@@ -45,11 +58,7 @@ const initialState: ServiceMenuState = {
     isReject: false,
   },
   cellsPrices: {
-    state: {
-      meta: {},
-      state: '',
-      view: { cells: [], screen: '' },
-    },
+    state: null,
     isLoading: false,
     isReject: false,
   },
@@ -58,12 +67,13 @@ const initialState: ServiceMenuState = {
     isLoading: false,
     isReject: false,
   },
+  cellsTest: {
+    state: null,
+    isLoading: false,
+    isReject: false,
+  },
   cellsConfig: {
-    state: {
-      meta: {},
-      state: '',
-      view: { cells: [], screen: '' },
-    },
+    state: null,
     isLoading: false,
     isReject: false,
   },
@@ -96,9 +106,14 @@ const serviceMenuSlice = createSlice({
   name: 'serviceMenu',
   initialState,
   reducers: {
+    setSelectedCellControlTab(state, action: PayloadAction<CellControlEnum>) {
+      state.selectedCellControlTab = action.payload;
+    },
+
     setChangeCellsProducts(state, action: PayloadAction<ChangeCellsProducts>) {
       state.changeCellsProducts = action.payload;
     },
+
     resetChangeCellsProducts(state) {
       state.changeCellsProducts = {
         mode: null,
@@ -143,6 +158,21 @@ const serviceMenuSlice = createSlice({
       state.cellsConfig.isReject = true;
     });
 
+    // turnOnOffCellsThunk
+    builder.addCase(turnOnOffCellsThunk.fulfilled, (state, action) => {
+      state.cellsConfig.state = action.payload;
+    });
+
+    // mergeCellsThunk
+    builder.addCase(mergeCellsThunk.fulfilled, (state, action) => {
+      state.cellsConfig.state = action.payload;
+    });
+
+    // changeCellsTypeThunk
+    builder.addCase(changeCellsTypeThunk.fulfilled, (state, action) => {
+      state.cellsConfig.state = action.payload;
+    });
+
     // getCellsStocksThunk
     builder.addCase(getCellsStocksThunk.pending, (state) => {
       state.cellsStocks.isLoading = true;
@@ -175,6 +205,17 @@ const serviceMenuSlice = createSlice({
     builder.addCase(getCellsPricesThunk.rejected, (state) => {
       state.cellsPrices.isLoading = false;
       state.cellsPrices.isReject = true;
+      state.cellsPrices.isReject = false;
+    });
+
+    // changeCellsPricesRowThunk
+    builder.addCase(changeCellsPricesRowThunk.fulfilled, (state, action) => {
+      state.cellsPrices.state = action.payload;
+    });
+
+    // changeCellPriceThunk
+    builder.addCase(changeCellPriceThunk.fulfilled, (state, action) => {
+      state.cellsPrices.state = action.payload;
     });
 
     // getCellsProductsThunk
@@ -192,6 +233,33 @@ const serviceMenuSlice = createSlice({
     builder.addCase(getCellsProductsThunk.rejected, (state) => {
       state.cellsProducts.isLoading = false;
       state.cellsProducts.isReject = true;
+    });
+
+    // assignProductToCellThunk
+    builder.addCase(assignProductToCellThunk.fulfilled, (state, action) => {
+      state.cellsProducts.state = action.payload;
+    });
+
+    // assignProductToRowThunk
+    builder.addCase(assignProductToRowThunk.fulfilled, (state, action) => {
+      state.cellsProducts.state = action.payload;
+    });
+
+    builder.addCase(getCellsTestThunk.pending, (state) => {
+      state.cellsTest.isLoading = true;
+      state.cellsTest.isReject = false;
+    });
+
+    // getCellsTestThunk
+    builder.addCase(getCellsTestThunk.fulfilled, (state, action) => {
+      state.cellsTest.isLoading = false;
+      state.cellsTest.state = action.payload;
+      state.cellsTest.isReject = Boolean(action.payload.meta?.warn);
+    });
+
+    builder.addCase(getCellsTestThunk.rejected, (state) => {
+      state.cellsTest.isLoading = false;
+      state.cellsTest.isReject = true;
     });
 
     // getOpenProductsListThunk
@@ -217,6 +285,7 @@ const serviceMenuSlice = createSlice({
   },
 });
 
-export const { setChangeCellsProducts, resetChangeCellsProducts } = serviceMenuSlice.actions;
+export const { setSelectedCellControlTab, setChangeCellsProducts, resetChangeCellsProducts } =
+  serviceMenuSlice.actions;
 
 export const serviceMenuReducer = serviceMenuSlice.reducer;

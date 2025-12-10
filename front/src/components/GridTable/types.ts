@@ -61,9 +61,13 @@ export type GridTableProps<T> = {
   /**
    * Тип layout
    */
-  layout?: 'scroll' | 'wrap';
+  layout?: 'scroll' | 'wrap' | 'fit';
   /**
    * Количество колонок в layout: wrap
    */
   wrapColumns?: number;
+  /**
+   * Ширина одной ячейки
+   */
+  cellWidth?: number;
 };

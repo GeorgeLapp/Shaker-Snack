@@ -1,15 +1,18 @@
-import { useAppSelector } from '../../../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks/store';
 import { selectCellsProducts } from '../../../../../state/serviceMenu/selectors';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { getCellsProductsAction } from '../../../../../state/serviceMenu/action';
 
 /**
  * Хук для преобразования ячеек с товарами
  */
 export const useCellsControlProducts = () => {
+  const dispatch = useAppDispatch();
+
   const { state: cellsProducts, isReject: isRejectCellsProducts } =
     useAppSelector(selectCellsProducts());
 
-  const cellsPricesRows = useMemo(() => {
+  const cellsProductsRows = useMemo(() => {
     const cells = cellsProducts?.view.cells || [];
     const rows: (typeof cells)[] = [];
 
@@ -26,8 +29,12 @@ export const useCellsControlProducts = () => {
     return rows;
   }, [cellsProducts]);
 
+  useEffect(() => {
+    dispatch(getCellsProductsAction());
+  }, [dispatch]);
+
   return {
-    cellsPricesRows,
+    cellsProductsRows: cellsProductsRows,
     isRejectCellsProducts: isRejectCellsProducts,
   };
 };
