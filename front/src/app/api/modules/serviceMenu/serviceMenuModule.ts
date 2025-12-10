@@ -4,6 +4,7 @@ import {
   CellPriceDTO,
   CellsPricesRowDTO,
   ChangeCellsTypeDTO,
+  DiagnosticsTestDTO,
   MergeCellsDTO,
   OpenProductListDTO,
   Pin,
@@ -78,7 +79,9 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Получение диагностики ячеек
    */
   getCellsTest() {
-    return this.request.post(`${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`);
+    return this.request.post<undefined, DiagnosticsTestDTO>(
+      `${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`,
+    );
     // return getDataFromServer(mockCells);
   }
 

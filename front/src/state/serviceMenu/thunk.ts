@@ -4,6 +4,7 @@ import {
   CellPriceDTO,
   CellsPricesRowDTO,
   ChangeCellsTypeDTO,
+  DiagnosticsTestDTO,
   MergeCellsDTO,
   OpenProductListDTO,
   Pin,
@@ -77,9 +78,12 @@ export const getCellsProductsThunk = createAsyncThunk<ServiceMenuProductsDTO, un
 /**
  * Получение диагностики ячеек
  */
-export const getCellsTestThunk = createAsyncThunk('getCellsTest', async () => {
-  return await api.serviceMenu.getCellsTest();
-});
+export const getCellsTestThunk = createAsyncThunk<DiagnosticsTestDTO, undefined>(
+  'getCellsTest',
+  async () => {
+    return await api.serviceMenu.getCellsTest();
+  },
+);
 
 /**
  * Изменение цены во всем ряду
