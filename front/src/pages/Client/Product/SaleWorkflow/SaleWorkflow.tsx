@@ -93,7 +93,7 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
     description,
     icon,
   }: {
-    title: string;
+    title: string | ReactNode;
     status: 'default' | 'success' | 'error';
     description: string | ReactNode;
     icon: ReactNode;
@@ -124,7 +124,12 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
     switch (workflowSaleStatus) {
       case SaleWorkflowStatus.AwaitingCard:
         return renderContentWrapper({
-          title: 'Приложите карту к терминалу',
+          title: (
+            <>
+              Приложите карту
+              <br />к терминалу
+            </>
+          ),
           status: 'default',
           description: (
             <>

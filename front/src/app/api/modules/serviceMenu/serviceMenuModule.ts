@@ -17,8 +17,6 @@ import {
   ServiceMenuProductsDTO,
   TurnOnOffCellsDTO,
 } from '../../../../types/serverInterface/serviceMenuDTO';
-import { getDataFromServer } from '../../../../helpers/getDataFromServer';
-import { mockCells, mockCellsPrices } from '../client/mockData';
 
 export class ServiceMenuModule extends AbstractApiModule {
   /**
@@ -43,10 +41,10 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Получение конфига ячеек
    */
   getCellsConfig() {
-    /*return this.request.post<undefined, ServiceMenuConfigDTO>(
+    return this.request.post<undefined, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-config`,
-    );*/
-    return getDataFromServer(mockCellsPrices);
+    );
+    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
@@ -60,28 +58,28 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Получение цен
    */
   getCellsPrices() {
-    /*return this.request.post<undefined, ServiceMenuPricesDTO>(
+    return this.request.post<undefined, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-prices`,
-    );*/
-    return getDataFromServer(mockCellsPrices);
+    );
+    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
    * Получение товаров
    */
   getCellsProducts() {
-    /* return this.request.post<undefined, ServiceMenuProductsDTO>(
+    return this.request.post<undefined, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-products`,
-    );*/
-    return getDataFromServer(mockCellsPrices);
+    );
+    // return getDataFromServer(mockCellsPrices);
   }
 
   /**
    * Получение диагностики ячеек
    */
   getCellsTest() {
-    //return this.request.post(`${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`);
-    return getDataFromServer(mockCells);
+    return this.request.post(`${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`);
+    // return getDataFromServer(mockCells);
   }
 
   /**
