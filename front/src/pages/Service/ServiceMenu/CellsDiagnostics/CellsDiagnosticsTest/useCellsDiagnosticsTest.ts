@@ -1,12 +1,12 @@
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks/store';
 import { selectCellsTest } from '../../../../../state/serviceMenu/selectors';
 import { useEffect, useMemo } from 'react';
-import { getCellsTestAction } from '../../../../../state/serviceMenu/action';
+import { getCellsTestAction, pollCalibrationAction } from '../../../../../state/serviceMenu/action';
 
 /**
  * Хук для преобразования ячеек с диагностикой
  */
-export const useCellsDiagnosticsTest = () => {
+export const useCellsDiagnosticsTest = (isCalibrationClicked: boolean) => {
   const dispatch = useAppDispatch();
 
   const { state: cellsTest, isReject: isRejectCellsTest } = useAppSelector(selectCellsTest());
@@ -31,6 +31,20 @@ export const useCellsDiagnosticsTest = () => {
   useEffect(() => {
     dispatch(getCellsTestAction());
   }, [dispatch]);
+
+  useEffect(() => {
+    const done = cellsTest?.view.done;
+
+    if (done) return;
+
+    const intervalId = window.setInterval(() => {
+      isCalibrationClicked && dispatch(pollCalibrationAction());
+    }, 5000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [dispatch, cellsTest?.view.done, isCalibrationClicked]);
 
   return {
     cellsTestRows,

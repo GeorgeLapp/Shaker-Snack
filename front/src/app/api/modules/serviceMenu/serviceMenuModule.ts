@@ -5,9 +5,11 @@ import {
   CellsPricesRowDTO,
   ChangeCellsTypeDTO,
   DiagnosticsTestDTO,
+  LoadCalibrationDTO,
   MergeCellsDTO,
   OpenProductListDTO,
   Pin,
+  PollCalibrationDTO,
   ProductToCellDTO,
   ProductToRowDTO,
   RerunDiagnosticsDTO,
@@ -16,6 +18,8 @@ import {
   ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
+  SplitCellsDTO,
+  StartCalibrationDTO,
   TurnOnOffCellsDTO,
 } from '../../../../types/serverInterface/serviceMenuDTO';
 
@@ -41,8 +45,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение конфига ячеек
    */
-  getCellsConfig() {
-    return this.request.post<undefined, ServiceMenuConfigDTO>(
+  async getCellsConfig() {
+    return await this.request.post<undefined, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-config`,
     );
   }
@@ -57,8 +61,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение цен
    */
-  getCellsPrices() {
-    return this.request.post<undefined, ServiceMenuPricesDTO>(
+  async getCellsPrices() {
+    return await this.request.post<undefined, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-prices`,
     );
   }
@@ -66,8 +70,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение товаров
    */
-  getCellsProducts() {
-    return this.request.post<undefined, ServiceMenuProductsDTO>(
+  async getCellsProducts() {
+    return await this.request.post<undefined, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-products`,
     );
   }
@@ -75,9 +79,36 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение диагностики ячеек
    */
-  getCellsTest() {
-    return this.request.post<undefined, DiagnosticsTestDTO>(
+  async getCellsTest() {
+    return await this.request.post<undefined, DiagnosticsTestDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`,
+    );
+  }
+
+  /**
+   * Получение состояния моторов
+   */
+  loadCalibration() {
+    return this.request.post<undefined, LoadCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/load`,
+    );
+  }
+
+  /**
+   * Получение начала калибровки
+   */
+  startCalibration() {
+    return this.request.post<undefined, StartCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/calibration/start`,
+    );
+  }
+
+  /**
+   * Получение состояния калибровки
+   */
+  pollCalibration() {
+    return this.request.post<undefined, PollCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/calibration/poll`,
     );
   }
 
@@ -104,8 +135,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение списка товаров
    */
-  getOpenProductsList() {
-    return this.request.post<undefined, OpenProductListDTO>(
+  async getOpenProductsList() {
+    return await this.request.post<undefined, OpenProductListDTO>(
       `${serviceMenuBaseUrl}/bff/products/open-list`,
     );
   }
@@ -147,6 +178,16 @@ export class ServiceMenuModule extends AbstractApiModule {
     return this.request.post<MergeCellsDTO, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/cells/merge`,
       mergeCells,
+    );
+  }
+
+  /**
+   * Разъединение ячеек
+   */
+  splitCells(splitCells: SplitCellsDTO) {
+    return this.request.post<SplitCellsDTO, ServiceMenuConfigDTO>(
+      `${serviceMenuBaseUrl}/bff/cells/split`,
+      splitCells,
     );
   }
 

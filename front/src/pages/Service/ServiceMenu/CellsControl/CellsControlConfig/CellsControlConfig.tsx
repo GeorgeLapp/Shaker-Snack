@@ -1,8 +1,9 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useAppDispatch } from '../../../../../app/hooks/store';
 import {
   changeCellsTypeAction,
   mergeCellsAction,
+  splitCellsAction,
   turnOnOffCellsAction,
 } from '../../../../../state/serviceMenu/action';
 import ContentCard from '../../../../../components/ContentCard';
@@ -24,6 +25,7 @@ import {
   CellTypeEnum,
   ChangeCellsTypeDTO,
   MergeCellsDTO,
+  SplitCellsDTO,
   TurnOnOffCellsDTO,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
 import { GridCellProps } from '../../../../../components/GridTable/types';
@@ -46,7 +48,7 @@ const CellsControlConfig: FC = () => {
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
 
-  const selectedCellsData = useMemo<CellPrice[]>(() => {
+  /*const selectedCellsData = useMemo<CellPrice[]>(() => {
     if (!selectedCells.length || !cellsConfigRows.length) return [];
 
     const idsSet = new Set(selectedCells);
@@ -74,25 +76,17 @@ const CellsControlConfig: FC = () => {
     if (hasDisabledSelected) return false;
 
     const [first, second] = selectedCellsData;
-    const firstOddSecondEven = first.id % 2 === 1 && second.id % 2 === 0;
-    const secondOddFirstEven = second.id % 2 === 1 && first.id % 2 === 0;
 
-    return firstOddSecondEven || secondOddFirstEven;
+    return first.id % 2 === 1 && second.id % 2 === 0;
   }, [selectedCellsData, hasDisabledSelected]);
 
-  const canEnable = useMemo(
-    () =>
-      selectedCellsData.length > 0 &&
-      selectedCellsData.some((cell) => cell.status === CellStatusEnum.DISABLED),
-    [selectedCellsData],
-  );
+  const canSplitSelected = useMemo(() => {
+    if (selectedCellsData.length === 0) return false;
 
-  const canDisable = useMemo(
-    () =>
-      selectedCellsData.length > 0 &&
-      selectedCellsData.some((cell) => cell.status === CellStatusEnum.ENABLED),
-    [selectedCellsData],
-  );
+    if (hasDisabledSelected) return false;
+
+    return selectedCellsData.every((cell) => cell.size === 2);
+  }, [selectedCellsData, hasDisabledSelected]);*/
 
   // Обработчики
   const handleCellClick = (cell: CellPrice, rowIndex: number) => {
@@ -133,10 +127,10 @@ const CellsControlConfig: FC = () => {
   };
 
   const handleChangeCellsType = (type: CellTypeEnum) => {
-    if (selectedCells.length === 0 || hasDisabledSelected) return;
+    if (selectedCells.length === 0) return;
 
     const changeCellsType: ChangeCellsTypeDTO = {
-      cellsIds: selectedCells,
+      cellIds: selectedCells,
       type,
     };
 
@@ -149,16 +143,8 @@ const CellsControlConfig: FC = () => {
   const handleTurnOnOffCells = (status: CellStatusEnum) => {
     if (selectedCells.length === 0) return;
 
-    const targetIds = selectedCellsData
-      .filter((cell) => cell.status !== status)
-      .map((cell) => cell.id);
-
-    if (!targetIds.length) {
-      return;
-    }
-
     const turnOnOffCells: TurnOnOffCellsDTO = {
-      cellsIds: targetIds,
+      cellIds: selectedCells,
       status,
     };
 
@@ -169,13 +155,26 @@ const CellsControlConfig: FC = () => {
   };
 
   const handleMergeCells = () => {
-    if (!canMergeSelected) return;
+    if (selectedCells.length === 0) return;
 
     const mergeCells: MergeCellsDTO = {
-      cellsIds: selectedCells,
+      cellIds: selectedCells,
     };
 
     dispatch(mergeCellsAction(mergeCells)).then(() => {
+      setSelectedCells([]);
+      setSelectedRowIndex(null);
+    });
+  };
+
+  const handleSplitCells = () => {
+    if (selectedCells.length === 0) return;
+
+    const splitCells: SplitCellsDTO = {
+      cellIds: selectedCells,
+    };
+
+    dispatch(splitCellsAction(splitCells)).then(() => {
       setSelectedCells([]);
       setSelectedRowIndex(null);
     });
@@ -191,7 +190,7 @@ const CellsControlConfig: FC = () => {
         <HorizontalContainer space="s" align="center">
           <Button
             className={styles.button}
-            disabled={!canMergeSelected}
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"
@@ -201,12 +200,13 @@ const CellsControlConfig: FC = () => {
           />
           <Button
             className={styles.button}
-            disabled
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"
             view="clear"
             iconLeft={IconDivide}
+            onClick={handleSplitCells}
           />
         </HorizontalContainer>
       </VerticalContainer>
@@ -222,7 +222,7 @@ const CellsControlConfig: FC = () => {
         <HorizontalContainer space="s" align="center">
           <Button
             className={styles.button}
-            disabled={selectedCells.length === 0 || hasDisabledSelected}
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"
@@ -232,7 +232,7 @@ const CellsControlConfig: FC = () => {
           />
           <Button
             className={styles.button}
-            disabled={selectedCells.length === 0 || hasDisabledSelected}
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"
@@ -254,7 +254,7 @@ const CellsControlConfig: FC = () => {
         <HorizontalContainer space="s" align="center">
           <Button
             className={styles.button}
-            disabled={!canEnable}
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"
@@ -264,7 +264,7 @@ const CellsControlConfig: FC = () => {
           />
           <Button
             className={styles.button}
-            disabled={!canDisable}
+            disabled={selectedCells.length === 0}
             onlyIcon
             size="l"
             iconSize="l"

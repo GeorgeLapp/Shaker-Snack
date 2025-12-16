@@ -1,10 +1,5 @@
 import { ProductMatrixDTO } from '../../../../types/serverInterface/ProductMatrixDTO';
-import {
-  CellStatusEnum,
-  CellTypeEnum,
-  DiagnosticsTestDTO,
-  ServiceMenuPricesDTO,
-} from '../../../../types/serverInterface/serviceMenuDTO';
+import { CellStatusEnum, CellTypeEnum } from '../../../../types/serverInterface/serviceMenuDTO';
 
 export const productMatrix: ProductMatrixDTO = [
   // Row 1 (5 cells)
@@ -650,7 +645,7 @@ export const productMatrix: ProductMatrixDTO = [
   },
 ];
 
-export const mockCells: DiagnosticsTestDTO = {
+export const mockCells = {
   meta: {
     warn: '',
   },
@@ -943,7 +938,7 @@ export const mockCells: DiagnosticsTestDTO = {
   },
 };
 
-export const mockCellsPrices: ServiceMenuPricesDTO = {
+export const mockCellsPrices = {
   meta: {
     warn: '',
   },
