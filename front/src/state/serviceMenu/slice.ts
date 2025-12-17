@@ -13,18 +13,29 @@ import {
   getCellsTestThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
+  loadCalibrationThunk,
   mergeCellsThunk,
+  pollCalibrationThunk,
+  splitCellsThunk,
+  startCalibrationThunk,
   turnOnOffCellsThunk,
 } from './thunk';
 import {
+  CellStatusPollCalibrationEnum,
   ChangeCellsProducts,
-  DiagnosticsTestDTO,
+  DiagnosticsTestUI,
   OpenProductListDTO,
   ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 import { CellControlEnum } from '../../pages/Service/ServiceMenu/CellsControl/types';
+import {
+  changeMediaUrl,
+  changeMediaUrlProducts,
+  mergePollIntoDiagnostics,
+  toDiagnosticsTestUI,
+} from './helpers';
 
 type StateItemType<T> = {
   state: T extends [] ? T : T | null;
@@ -39,7 +50,7 @@ export type ServiceMenuState = {
   cellsPrices: StateItemType<ServiceMenuPricesDTO>;
   cellsProducts: StateItemType<ServiceMenuProductsDTO>;
   cellsConfig: StateItemType<ServiceMenuConfigDTO>;
-  cellsTest: StateItemType<DiagnosticsTestDTO>;
+  cellsTest: StateItemType<DiagnosticsTestUI>;
   openProductsList: StateItemType<OpenProductListDTO>;
   changeCellsProducts: ChangeCellsProducts;
   notifications: NotificationType[];
@@ -68,7 +79,15 @@ const initialState: ServiceMenuState = {
     isReject: false,
   },
   cellsTest: {
-    state: null,
+    state: {
+      meta: { warn: '' },
+      state: '',
+      view: {
+        screen: '',
+        done: false,
+        cells: [],
+      },
+    },
     isLoading: false,
     isReject: false,
   },
@@ -149,7 +168,7 @@ const serviceMenuSlice = createSlice({
 
     builder.addCase(getCellsConfigThunk.fulfilled, (state, action) => {
       state.cellsConfig.isLoading = false;
-      state.cellsConfig.state = action.payload;
+      state.cellsConfig.state = changeMediaUrl(action.payload);
       state.cellsConfig.isReject = Boolean(action.payload.meta?.warn);
     });
 
@@ -160,17 +179,22 @@ const serviceMenuSlice = createSlice({
 
     // turnOnOffCellsThunk
     builder.addCase(turnOnOffCellsThunk.fulfilled, (state, action) => {
-      state.cellsConfig.state = action.payload;
+      state.cellsConfig.state = changeMediaUrl(action.payload);
     });
 
     // mergeCellsThunk
     builder.addCase(mergeCellsThunk.fulfilled, (state, action) => {
-      state.cellsConfig.state = action.payload;
+      state.cellsConfig.state = changeMediaUrl(action.payload);
+    });
+
+    // splitCellsThunk
+    builder.addCase(splitCellsThunk.fulfilled, (state, action) => {
+      state.cellsConfig.state = changeMediaUrl(action.payload);
     });
 
     // changeCellsTypeThunk
     builder.addCase(changeCellsTypeThunk.fulfilled, (state, action) => {
-      state.cellsConfig.state = action.payload;
+      state.cellsConfig.state = changeMediaUrl(action.payload);
     });
 
     // getCellsStocksThunk
@@ -198,24 +222,23 @@ const serviceMenuSlice = createSlice({
 
     builder.addCase(getCellsPricesThunk.fulfilled, (state, action) => {
       state.cellsPrices.isLoading = false;
-      state.cellsPrices.state = action.payload;
+      state.cellsPrices.state = changeMediaUrl(action.payload);
       state.cellsPrices.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsPricesThunk.rejected, (state) => {
       state.cellsPrices.isLoading = false;
       state.cellsPrices.isReject = true;
-      state.cellsPrices.isReject = false;
     });
 
     // changeCellsPricesRowThunk
     builder.addCase(changeCellsPricesRowThunk.fulfilled, (state, action) => {
-      state.cellsPrices.state = action.payload;
+      state.cellsPrices.state = changeMediaUrl(action.payload);
     });
 
     // changeCellPriceThunk
     builder.addCase(changeCellPriceThunk.fulfilled, (state, action) => {
-      state.cellsPrices.state = action.payload;
+      state.cellsPrices.state = changeMediaUrl(action.payload);
     });
 
     // getCellsProductsThunk
@@ -226,7 +249,7 @@ const serviceMenuSlice = createSlice({
 
     builder.addCase(getCellsProductsThunk.fulfilled, (state, action) => {
       state.cellsProducts.isLoading = false;
-      state.cellsProducts.state = action.payload;
+      state.cellsProducts.state = changeMediaUrl(action.payload);
       state.cellsProducts.isReject = Boolean(action.payload.meta?.warn);
     });
 
@@ -237,28 +260,89 @@ const serviceMenuSlice = createSlice({
 
     // assignProductToCellThunk
     builder.addCase(assignProductToCellThunk.fulfilled, (state, action) => {
-      state.cellsProducts.state = action.payload;
+      state.cellsProducts.state = changeMediaUrl(action.payload);
     });
 
     // assignProductToRowThunk
     builder.addCase(assignProductToRowThunk.fulfilled, (state, action) => {
-      state.cellsProducts.state = action.payload;
+      state.cellsProducts.state = changeMediaUrl(action.payload);
     });
 
+    // getCellsTestThunk
     builder.addCase(getCellsTestThunk.pending, (state) => {
       state.cellsTest.isLoading = true;
       state.cellsTest.isReject = false;
     });
 
-    // getCellsTestThunk
     builder.addCase(getCellsTestThunk.fulfilled, (state, action) => {
+      const prev = state.cellsTest.state || undefined;
+
       state.cellsTest.isLoading = false;
-      state.cellsTest.state = action.payload;
+      state.cellsTest.state = toDiagnosticsTestUI(action.payload, prev);
       state.cellsTest.isReject = Boolean(action.payload.meta?.warn);
     });
 
     builder.addCase(getCellsTestThunk.rejected, (state) => {
       state.cellsTest.isLoading = false;
+      state.cellsTest.isReject = true;
+    });
+
+    // loadCalibrationThunk
+    builder.addCase(loadCalibrationThunk.pending, (state) => {
+      state.cellsTest.isLoading = true;
+      state.cellsTest.isReject = false;
+    });
+
+    builder.addCase(loadCalibrationThunk.fulfilled, (state, action) => {
+      state.cellsTest.isLoading = false;
+
+      const prev = state.cellsTest.state || undefined;
+      state.cellsTest.state = toDiagnosticsTestUI(action.payload, prev);
+      state.cellsTest.isReject = Boolean(action.payload.meta?.warn);
+    });
+
+    builder.addCase(loadCalibrationThunk.rejected, (state) => {
+      state.cellsTest.isLoading = false;
+      state.cellsTest.isReject = true;
+    });
+
+    // startCalibrationThunk
+    builder.addCase(startCalibrationThunk.pending, (state) => {
+      state.cellsTest.isLoading = true;
+      state.cellsTest.isReject = false;
+    });
+
+    builder.addCase(startCalibrationThunk.fulfilled, (state) => {
+      state.cellsTest.isLoading = false;
+
+      if (!state.cellsTest.state) return;
+
+      state.cellsTest.state.view.done = false;
+      state.cellsTest.state.view.cells = state.cellsTest.state.view.cells.map((c) => ({
+        ...c,
+        loadingStatus: CellStatusPollCalibrationEnum.PENDING,
+        message: null,
+        updatedAtCalibration: null,
+      }));
+    });
+
+    builder.addCase(startCalibrationThunk.rejected, (state) => {
+      state.cellsTest.isLoading = false;
+      state.cellsTest.isReject = true;
+    });
+
+    // pollCalibrationThunk
+    builder.addCase(pollCalibrationThunk.pending, (state) => {
+      state.cellsTest.isReject = false;
+    });
+
+    builder.addCase(pollCalibrationThunk.fulfilled, (state, action) => {
+      if (!state.cellsTest.state) return;
+
+      state.cellsTest.state = mergePollIntoDiagnostics(state.cellsTest.state, action.payload);
+    });
+
+    builder.addCase(pollCalibrationThunk.rejected, (state) => {
       state.cellsTest.isReject = true;
     });
 
@@ -270,7 +354,7 @@ const serviceMenuSlice = createSlice({
 
     builder.addCase(getOpenProductsListThunk.fulfilled, (state, action) => {
       state.openProductsList.isLoading = false;
-      state.openProductsList.state = action.payload;
+      state.openProductsList.state = changeMediaUrlProducts(action.payload);
       state.openProductsList.isReject = Boolean(action.payload.meta?.warn);
     });
 

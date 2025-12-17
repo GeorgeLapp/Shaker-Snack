@@ -64,6 +64,14 @@ $cardSize: 100px;
       color: var(--typo-main-secondary)
     }
 
+    .iconAlert {
+      color: var(--typo-status-alert)
+    }
+
+    .iconSuccess {
+      color: var(--typo-status-success);
+    }
+
     &.isSelected {
       background: var(--control-primary-bg-bg);
     }

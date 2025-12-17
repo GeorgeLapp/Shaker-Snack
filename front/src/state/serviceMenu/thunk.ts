@@ -5,9 +5,11 @@ import {
   CellsPricesRowDTO,
   ChangeCellsTypeDTO,
   DiagnosticsTestDTO,
+  LoadCalibrationDTO,
   MergeCellsDTO,
   OpenProductListDTO,
   Pin,
+  PollCalibrationDTO,
   ProductToCellDTO,
   ProductToRowDTO,
   RerunDiagnosticsDTO,
@@ -16,6 +18,8 @@ import {
   ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
+  SplitCellsDTO,
+  StartCalibrationDTO,
   TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
@@ -86,6 +90,36 @@ export const getCellsTestThunk = createAsyncThunk<DiagnosticsTestDTO, undefined>
 );
 
 /**
+ * Получение состояния моторов
+ */
+export const loadCalibrationThunk = createAsyncThunk<LoadCalibrationDTO, undefined>(
+  'loadCalibration',
+  async () => {
+    return await api.serviceMenu.loadCalibration();
+  },
+);
+
+/**
+ * Получение начала калибровки
+ */
+export const startCalibrationThunk = createAsyncThunk<StartCalibrationDTO, undefined>(
+  'startCalibration',
+  async () => {
+    return await api.serviceMenu.startCalibration();
+  },
+);
+
+/**
+ * Получение состояния калибровки
+ */
+export const pollCalibrationThunk = createAsyncThunk<PollCalibrationDTO, undefined>(
+  'pollCalibration',
+  async () => {
+    return await api.serviceMenu.pollCalibration();
+  },
+);
+
+/**
  * Изменение цены во всем ряду
  */
 export const changeCellsPricesRowThunk = createAsyncThunk<ServiceMenuPricesDTO, CellsPricesRowDTO>(
@@ -152,6 +186,16 @@ export const mergeCellsThunk = createAsyncThunk<ServiceMenuConfigDTO, MergeCells
   'mergeCells',
   async (mergeCells) => {
     return await api.serviceMenu.mergeCells(mergeCells);
+  },
+);
+
+/**
+ * Разъединение ячеек
+ */
+export const splitCellsThunk = createAsyncThunk<ServiceMenuConfigDTO, SplitCellsDTO>(
+  'splitCells',
+  async (splitCells) => {
+    return await api.serviceMenu.splitCells(splitCells);
   },
 );
 

@@ -18,7 +18,6 @@ import CellsControlConfig from './CellsControlConfig';
 import CellsControlProducts from './CellsControlProducts';
 import { selectCellControlTab } from '../../../../state/serviceMenu/selectors';
 import { setSelectedCellControlTab } from '../../../../state/serviceMenu/slice';
-import { IconRevert } from '@consta/icons/IconRevert';
 
 /**
  * Управление ячейками
@@ -74,7 +73,7 @@ const CellsControl: FC = () => {
   const renderTabs = () => (
     <HorizontalContainer isAutoWidth isAutoSpace>
       <TabsBadge size="l" tabsList={tabsList} />
-      <Button size="l" onlyIcon iconLeft={IconRevert} view="ghost" />
+      {/*<Button size="l" onlyIcon iconLeft={IconRevert} view="ghost" />*/}
     </HorizontalContainer>
   );
 

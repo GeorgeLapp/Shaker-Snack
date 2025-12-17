@@ -7,18 +7,22 @@ import HorizontalContainer from '../../../../../components/HorizontalContainer';
 import { Button } from '@consta/uikit/Button';
 import { useAppDispatch } from '../../../../../app/hooks/store';
 import {
-  rerunDiagnosticsAction,
-  runDiagnosticsAction,
+  loadCalibrationAction,
+  pollCalibrationAction,
+  startCalibrationAction,
 } from '../../../../../state/serviceMenu/action';
 import {
   CellDiagnostics,
-  RunDiagnosticsDTO,
+  CellDiagnosticsUI,
+  CellStatusPollCalibrationEnum,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
 import { GridCellProps } from '../../../../../components/GridTable/types';
 import GridTable from '../../../../../components/GridTable';
 import { useCellsDiagnosticsTest } from './useCellsDiagnosticsTest';
 import { IconQuestion } from '../../../../../assets/icon/iconQuestion';
 import classNames from 'classnames';
+import { IconCheckFilled } from '../../../../../assets/icon/IconCheckFilled';
+import { IconAlert } from '../../../../../assets/icon/iconAlert';
 
 const cellGap = 7.2;
 const rowGap = 12;
@@ -30,15 +34,36 @@ const rowContentHeight = 222;
 const CellsDiagnosticsTest: FC = () => {
   const dispatch = useAppDispatch();
 
-  const { cellsTestRows, isRejectCellsTest } = useCellsDiagnosticsTest();
-
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
+  const [isCalibrationClicked, setIsCalibrationClicked] = useState(false);
+
+  const { cellsTestRows, isRejectCellsTest } = useCellsDiagnosticsTest(isCalibrationClicked);
+
+  console.log(cellsTestRows);
 
   // Вспомогательные функции
   const getAllCellIds = () => cellsTestRows.flatMap((row) => row.map((cell) => cell.id));
 
+  const getStatusIcon = (loadingStatus: CellStatusPollCalibrationEnum) => {
+    switch (loadingStatus) {
+      case CellStatusPollCalibrationEnum.SUCCESS:
+        return <IconCheckFilled size="m" className={styles.iconSuccess} />;
+      case CellStatusPollCalibrationEnum.PENDING:
+        return <IconQuestion size="m" className={styles.iconQuestion} />;
+      default:
+        return <IconAlert size="m" className={styles.iconAlert} />;
+    }
+  };
+
   // Обработчики
-  const handleRunDiagnostics = () => {
+  const handleClickCalibration = () => {
+    setIsCalibrationClicked(true);
+    dispatch(loadCalibrationAction())
+      .then(() => dispatch(startCalibrationAction()))
+      .then(() => dispatch(pollCalibrationAction()));
+  };
+
+  /*const handleRunDiagnostics = () => {
     const cellsIds = selectedCells.length ? selectedCells : getAllCellIds();
 
     if (!cellsIds.length) return;
@@ -76,7 +101,7 @@ const CellsDiagnosticsTest: FC = () => {
     const isAllSelected = allIds.length > 0 && allIds.every((id) => selectedCells.includes(id));
 
     setSelectedCells(isAllSelected ? [] : allIds);
-  };
+  };*/
 
   // render методы
   const renderActionsContentCard = () => (
@@ -92,11 +117,11 @@ const CellsDiagnosticsTest: FC = () => {
               size="l"
               view="secondary"
               label="Диагностика"
-              onClick={handleRunDiagnostics}
+              onClick={handleClickCalibration}
               disabled={!getAllCellIds().length}
             />
           </HorizontalContainer>
-          <Button size="l" view="clear" label="Выбрать все" onClick={handleSelectAll} />
+          {/*<Button size="l" view="clear" label="Выбрать все" onClick={handleSelectAll} />*/}
         </HorizontalContainer>
       </VerticalContainer>
     </ContentCard>
@@ -105,12 +130,12 @@ const CellsDiagnosticsTest: FC = () => {
   const renderRowTitle = (index: number) => (
     <HorizontalContainer isAutoWidth isAutoSpace>
       <Text>{index} полка</Text>
-      <Button
+      {/*<Button
         label="Выбрать всю полку"
         size="s"
         view="clear"
         onClick={() => handleSelectRow(index)}
-      />
+      />*/}
     </HorizontalContainer>
   );
 
@@ -138,21 +163,17 @@ const CellsDiagnosticsTest: FC = () => {
     );
   };
 
-  const renderCellDiagnostics = (cell: CellDiagnostics, isSelected: boolean) => (
+  const renderCellDiagnostics = (cell: CellDiagnosticsUI, isSelected: boolean) => (
     <ContentCard className={classNames(styles.motorCellCard, isSelected && styles.isSelected)}>
-      <HorizontalContainer>
-        {cell.motorIds.map((motorId) => (
-          <IconQuestion size="m" key={motorId} className={styles.iconQuestion} />
-        ))}
-      </HorizontalContainer>
+      <HorizontalContainer>{getStatusIcon(cell.loadingStatus)}</HorizontalContainer>
     </ContentCard>
   );
 
-  const renderCell = ({ data }: GridCellProps<CellDiagnostics>) => {
+  const renderCell = ({ data }: GridCellProps<CellDiagnosticsUI>) => {
     const isSelected = selectedCells.includes(data.id);
 
     return (
-      <VerticalContainer space={0} onClick={() => handleToggleCell(data.id)}>
+      <VerticalContainer space={0}>
         {renderCellNumber(data, isSelected)}
         {renderCellPlaceholder(data, isSelected)}
         {renderCellDiagnostics(data, isSelected)}

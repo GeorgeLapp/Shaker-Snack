@@ -54,11 +54,8 @@ $cardSize: 100px;
     }
 
     .img {
-      min-width: $cardSize;
       max-width: 100%;
-      height: $cardSize;
-
-      overflow: hidden;
+      max-height: 100%;
     }
   }
 

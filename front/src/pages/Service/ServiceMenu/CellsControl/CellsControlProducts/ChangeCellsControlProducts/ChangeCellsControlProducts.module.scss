@@ -36,12 +36,9 @@ $cardSize: 100px;
     background: var(--bg-main-brand);
 
     .img {
-      min-width: $cardSize;
       max-width: 100%;
-      height: $cardSize;
+      max-height: 100%;
       border-radius: calc(var(--control-radius-m) - 1px);
-
-      overflow: hidden;
     }
   }
 

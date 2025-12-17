@@ -14,10 +14,14 @@ import {
   getCellsTestThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
+  loadCalibrationThunk,
   mergeCellsThunk,
+  pollCalibrationThunk,
   rerunDiagnosticsThunk,
   retryThunk,
   runDiagnosticsThunk,
+  splitCellsThunk,
+  startCalibrationThunk,
   turnOnOffCellsThunk,
 } from './thunk';
 import {
@@ -30,6 +34,7 @@ import {
   ProductToRowDTO,
   RerunDiagnosticsDTO,
   RunDiagnosticsDTO,
+  SplitCellsDTO,
   TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
@@ -76,6 +81,24 @@ export const getCellsProductsAction = () => (dispatch: AppDispatch) =>
 export const getCellsTestAction = () => (dispatch: AppDispatch) => dispatch(getCellsTestThunk());
 
 /**
+ * Получение состояния моторов
+ */
+export const loadCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(loadCalibrationThunk());
+
+/**
+ * Получение начала калибровки
+ */
+export const startCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(startCalibrationThunk());
+
+/**
+ * Получение состояния калибровки
+ */
+export const pollCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(pollCalibrationThunk());
+
+/**
  * Изменение цены во всем ряду
  */
 export const changeCellsPricesRowAction =
@@ -120,6 +143,12 @@ export const turnOnOffCellsAction =
  */
 export const mergeCellsAction = (mergeCells: MergeCellsDTO) => (dispatch: AppDispatch) =>
   dispatch(mergeCellsThunk(mergeCells));
+
+/**
+ * Разъединение ячеек
+ */
+export const splitCellsAction = (splitCells: SplitCellsDTO) => (dispatch: AppDispatch) =>
+  dispatch(splitCellsThunk(splitCells));
 
 /**
  * Изменение типа ячеек
