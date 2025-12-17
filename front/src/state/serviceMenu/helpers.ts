@@ -74,7 +74,7 @@ export const mergePollIntoDiagnostics = (
       imgPath: buildServiceMenuUrl(cell.productId, cell.imgPath),
       loadingStatus: p.status,
       message: p.message,
-      updatedAtCalibration: p.updatedAt ?? null,
+      updatedAtCalibration: p.updatedAt || null,
     };
   });
 
