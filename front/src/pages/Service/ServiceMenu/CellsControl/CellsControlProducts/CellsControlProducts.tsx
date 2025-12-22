@@ -1,11 +1,9 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import ContentCard from '../../../../../components/ContentCard';
 import VerticalContainer from '../../../../../components/VerticalContainer';
 import HorizontalContainer from '../../../../../components/HorizontalContainer';
 import { Button } from '@consta/uikit/Button';
 import { Text } from '@consta/uikit/Text';
-import { getCellsProductsAction } from '../../../../../state/serviceMenu/action';
-import { useAppDispatch } from '../../../../../app/hooks/store';
 import GridTable from '../../../../../components/GridTable';
 import { useCellsControlProducts } from './useCellsControlProducts';
 import { GridCellProps } from '../../../../../components/GridTable/types';
@@ -14,13 +12,17 @@ import { setChangeCellsProducts } from '../../../../../state/serviceMenu/slice';
 import { useNavigate } from 'react-router-dom';
 import {
   CellPrice,
+  CellStatusEnum,
   ChangeCellsModeEnum,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
 import Error from '../../../../../components/Error';
+import { useAppDispatch } from '../../../../../app/hooks/store';
+import { IconPowerOff } from '../../../../../assets/icon/iconPowerOff';
 
 const cellGap = 7.2;
 const rowGap = 12;
 const rowContentHeight = 222;
+const cellWidth = 100;
 
 /**
  * Управление ячейками: товары
@@ -30,11 +32,7 @@ const CellsControlProducts: FC = () => {
 
   const navigate = useNavigate();
 
-  const { cellsPricesRows, isRejectCellsProducts } = useCellsControlProducts();
-
-  useEffect(() => {
-    dispatch(getCellsProductsAction());
-  }, [dispatch]);
+  const { cellsProductsRows, isRejectCellsProducts } = useCellsControlProducts();
 
   // Обработчики
   const handleChangeRowProductsOpen = (index: number) => {
@@ -66,7 +64,7 @@ const CellsControlProducts: FC = () => {
   // render методы
   const renderRowTitle = (index: number) => (
     <HorizontalContainer isAutoWidth isAutoSpace>
-      <Text>{index} ряд</Text>
+      <Text>{index} полка</Text>
       <Button
         label="Изменить товары для всех ячеек в полке"
         size="s"
@@ -78,9 +76,13 @@ const CellsControlProducts: FC = () => {
 
   const renderCellNumber = (cell: CellPrice) => (
     <ContentCard className={styles.cellNumberCard}>
-      <Text size="s" weight="semibold" view="system">
-        № {cell.id}
-      </Text>
+      {cell.status === CellStatusEnum.DISABLED ? (
+        <IconPowerOff className={styles.iconPowerOff} />
+      ) : (
+        <Text size="s" weight="semibold" view="system">
+          № {cell.id}
+        </Text>
+      )}
     </ContentCard>
   );
 
@@ -120,12 +122,13 @@ const CellsControlProducts: FC = () => {
   const renderGridTable = () => (
     <GridTable
       rowContentClassName={styles.rowContentClassName}
-      data={cellsPricesRows || []}
+      data={cellsProductsRows || []}
       cellComponent={renderCell}
       rowContentHeight={rowContentHeight}
       getRowTitle={renderRowTitle}
       rowGap={rowGap}
       cellGap={cellGap}
+      cellWidth={cellWidth}
     />
   );
 

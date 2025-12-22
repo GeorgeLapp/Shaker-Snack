@@ -10,11 +10,9 @@ import {
 } from '../../../../../../types/serverInterface/serviceMenuDTO';
 import { useAppDispatch } from '../../../../../../app/hooks/store';
 import {
-  backToServiceMenuAction,
   changeCellPriceAction,
   changeCellsPricesRowAction,
 } from '../../../../../../state/serviceMenu/action';
-import { useNavigate } from 'react-router-dom';
 import { TextField } from '@consta/uikit/TextField';
 import { getInputNumberValue } from '../../../../../../helpers/inputHelpers';
 import styles from './ChangeCellsControlPrice.module.scss';
@@ -24,6 +22,7 @@ import styles from './ChangeCellsControlPrice.module.scss';
  */
 const ChangeCellsControlPrices: FC<ChangeCellControlPricesProps> = ({
   isOpen,
+  cellRowPrice,
   row,
   cell,
   mode,
@@ -31,9 +30,7 @@ const ChangeCellsControlPrices: FC<ChangeCellControlPricesProps> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-
-  const [price, setPrice] = useState<number | null>(null);
+  const [price, setPrice] = useState<number | null>(cellRowPrice);
 
   // Обработчики
   const handleSubmit = () => {
@@ -45,26 +42,20 @@ const ChangeCellsControlPrices: FC<ChangeCellControlPricesProps> = ({
         price,
       };
 
-      dispatch(changeCellsPricesRowAction(cellsPricesRow))
-        .then(() => dispatch(backToServiceMenuAction()))
-        .then(() => {
-          onClose();
-          navigate('/menu');
-        });
+      dispatch(changeCellsPricesRowAction(cellsPricesRow)).then(() => {
+        onClose();
+      });
     }
 
     if (mode === ChangeCellsModeEnum.CELL && cell !== null) {
       const cellPrice: CellPriceDTO = {
         cellId: cell,
-        price: price,
+        price,
       };
 
-      dispatch(changeCellPriceAction(cellPrice))
-        .then(() => dispatch(backToServiceMenuAction()))
-        .then(() => {
-          onClose();
-          navigate('/menu');
-        });
+      dispatch(changeCellPriceAction(cellPrice)).then(() => {
+        onClose();
+      });
     }
   };
 

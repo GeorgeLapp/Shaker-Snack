@@ -7,19 +7,24 @@ $cardSize: 100px;
   }
 
   .cellNumberCard {
-    min-width: $cardSize;
-    width: 100%;
+    width: $cardSize;
     height: $cellNumberCardHeight;
     border-radius: var(--control-radius-round-s) var(--control-radius-round-s) 0  0;
     box-sizing: border-box;
     padding: var(--space-3xs) var(--space-xs);
 
     background: var(--bg-status-system);
+
+    .iconPowerOff {
+      width: var(--space-l);
+      height: var(--space-l);
+
+      color: var(--typo-status-alert)
+    }
   }
 
   .mainPartCard {
-    min-width: $cardSize;
-    width: 100%;
+    width: $cardSize;
     height: $cardSize;
     border-radius: 0;
     border-right: 1px solid var(--bg-main-quaternary);
@@ -29,16 +34,13 @@ $cardSize: 100px;
     background: var(--bg-main-brand);
 
     .img {
-      min-width: $cardSize;
       max-width: 100%;
-      height: $cardSize;
-
-      overflow: hidden;
+      max-height: 100%;
     }
   }
 
   .priceCellCard {
-    min-width: $cardSize;
+    width: $cardSize;
     box-sizing: border-box;
     border-radius: 0 0 var(--control-radius-s) var(--control-radius-s);
     height: $cellNumberCardHeight;

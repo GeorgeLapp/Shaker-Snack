@@ -1,11 +1,14 @@
-import { useAppSelector } from '../../../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks/store';
 import { selectCellsPrices } from '../../../../../state/serviceMenu/selectors';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { getCellsPricesAction } from '../../../../../state/serviceMenu/action';
 
 /**
  * Хук для преобразования ячеек с ценами
  */
 export const useCellsControlPrices = () => {
+  const dispatch = useAppDispatch();
+
   const { state: cellsPrices, isReject: isRejectCellsPrices } = useAppSelector(selectCellsPrices());
 
   const cellsPricesRows = useMemo(() => {
@@ -25,5 +28,9 @@ export const useCellsControlPrices = () => {
     return rows;
   }, [cellsPrices]);
 
-  return { cellsPricesRows, isRejectCellsPrices };
+  useEffect(() => {
+    dispatch(getCellsPricesAction());
+  }, [dispatch]);
+
+  return { cellsPricesRows, isRejectCellsPrices: isRejectCellsPrices };
 };

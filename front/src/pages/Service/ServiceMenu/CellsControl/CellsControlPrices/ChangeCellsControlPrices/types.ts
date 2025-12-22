@@ -9,6 +9,10 @@ export type ChangeCellControlPricesProps = {
    */
   isOpen: boolean;
   /**
+   * Цена
+   */
+  cellRowPrice: number | null;
+  /**
    * Номер ряда
    */
   row: number | null;

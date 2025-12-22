@@ -11,10 +11,17 @@ import {
   getCellsPricesThunk,
   getCellsProductsThunk,
   getCellsStocksThunk,
+  getCellsTestThunk,
   getOpenProductsListThunk,
   getOpenSettingsThunk,
+  loadCalibrationThunk,
   mergeCellsThunk,
+  pollCalibrationThunk,
+  rerunDiagnosticsThunk,
   retryThunk,
+  runDiagnosticsThunk,
+  splitCellsThunk,
+  startCalibrationThunk,
   turnOnOffCellsThunk,
 } from './thunk';
 import {
@@ -25,6 +32,9 @@ import {
   Pin,
   ProductToCellDTO,
   ProductToRowDTO,
+  RerunDiagnosticsDTO,
+  RunDiagnosticsDTO,
+  SplitCellsDTO,
   TurnOnOffCellsDTO,
 } from '../../types/serverInterface/serviceMenuDTO';
 
@@ -64,6 +74,29 @@ export const getCellsPricesAction = () => (dispatch: AppDispatch) =>
  */
 export const getCellsProductsAction = () => (dispatch: AppDispatch) =>
   dispatch(getCellsProductsThunk());
+
+/**
+ * Получение диагностики ячеек
+ */
+export const getCellsTestAction = () => (dispatch: AppDispatch) => dispatch(getCellsTestThunk());
+
+/**
+ * Получение состояния моторов
+ */
+export const loadCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(loadCalibrationThunk());
+
+/**
+ * Получение начала калибровки
+ */
+export const startCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(startCalibrationThunk());
+
+/**
+ * Получение состояния калибровки
+ */
+export const pollCalibrationAction = () => (dispatch: AppDispatch) =>
+  dispatch(pollCalibrationThunk());
 
 /**
  * Изменение цены во всем ряду
@@ -112,11 +145,31 @@ export const mergeCellsAction = (mergeCells: MergeCellsDTO) => (dispatch: AppDis
   dispatch(mergeCellsThunk(mergeCells));
 
 /**
+ * Разъединение ячеек
+ */
+export const splitCellsAction = (splitCells: SplitCellsDTO) => (dispatch: AppDispatch) =>
+  dispatch(splitCellsThunk(splitCells));
+
+/**
  * Изменение типа ячеек
  */
 export const changeCellsTypeAction =
   (changeCellsType: ChangeCellsTypeDTO) => (dispatch: AppDispatch) =>
     dispatch(changeCellsTypeThunk(changeCellsType));
+
+/**
+ * Тест ячеек
+ */
+export const runDiagnosticsAction =
+  (runDiagnostics: RunDiagnosticsDTO) => (dispatch: AppDispatch) =>
+    dispatch(runDiagnosticsThunk(runDiagnostics));
+
+/**
+ * Тест ячеек
+ */
+export const rerunDiagnosticsAction =
+  (rerunDiagnostics: RerunDiagnosticsDTO) => (dispatch: AppDispatch) =>
+    dispatch(rerunDiagnosticsThunk(rerunDiagnostics));
 
 /**
  * Переход к сервисному меню

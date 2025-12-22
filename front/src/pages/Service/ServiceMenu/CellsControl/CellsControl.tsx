@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useMemo } from 'react';
 import HorizontalContainer from '../../../../components/HorizontalContainer';
 import VerticalContainer from '../../../../components/VerticalContainer';
 import styles from './CellsControl.module.scss';
@@ -9,14 +9,15 @@ import { Text } from '@consta/uikit/Text';
 import { IconArrowRight } from '../../../../assets/icon/iconArrowRight';
 import TabsBadge from '../../../../components/TabsBadge';
 import { TabProps } from '../../../../components/TabsBadge/TabBadge/types';
-import { IconRevert } from '@consta/icons/IconRevert';
 import { CellControlEnum } from './types';
 import CellsControlPrices from './CellsControlPrices';
 import { backToServiceMenuAction } from '../../../../state/serviceMenu/action';
-import { useAppDispatch } from '../../../../app/hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks/store';
 import { cellControlTabs } from './const';
 import CellsControlConfig from './CellsControlConfig';
 import CellsControlProducts from './CellsControlProducts';
+import { selectCellControlTab } from '../../../../state/serviceMenu/selectors';
+import { setSelectedCellControlTab } from '../../../../state/serviceMenu/slice';
 
 /**
  * Управление ячейками
@@ -26,18 +27,7 @@ const CellsControl: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const [selectedCellControlTab, setSelectedCellControlTab] = useState<CellControlEnum>(
-    CellControlEnum.STOCKS,
-  );
-
-  // Обработчики
-  const handleBackClick = () => {
-    dispatch(backToServiceMenuAction()).then(() => navigate('/menu'));
-  };
-
-  const handleTabClick = (value: CellControlEnum) => {
-    dispatch(backToServiceMenuAction()).then(() => setSelectedCellControlTab(value));
-  };
+  const selectedCellControlTab = useAppSelector(selectCellControlTab());
 
   const tabsList = useMemo<TabProps[]>(
     () =>
@@ -48,6 +38,15 @@ const CellsControl: FC = () => {
       })),
     [selectedCellControlTab],
   );
+
+  // Обработчики
+  function handleTabClick(value: CellControlEnum) {
+    dispatch(backToServiceMenuAction()).then(() => dispatch(setSelectedCellControlTab(value)));
+  }
+
+  const handleBackClick = () => {
+    dispatch(backToServiceMenuAction()).then(() => navigate('/menu'));
+  };
 
   // render методы
   const renderHeader = () => (
@@ -74,7 +73,7 @@ const CellsControl: FC = () => {
   const renderTabs = () => (
     <HorizontalContainer isAutoWidth isAutoSpace>
       <TabsBadge size="l" tabsList={tabsList} />
-      <Button size="l" onlyIcon iconLeft={IconRevert} view="ghost" />
+      {/*<Button size="l" onlyIcon iconLeft={IconRevert} view="ghost" />*/}
     </HorizontalContainer>
   );
 
@@ -87,17 +86,15 @@ const CellsControl: FC = () => {
       case CellControlEnum.CONFIG:
         return <CellsControlConfig />;
       default:
-        return;
+        return null;
     }
   };
 
   return (
     <VerticalContainer space="l" className={styles.CellsControl}>
       {renderHeader()}
-      <VerticalContainer space="m">
-        {renderTabs()}
-        {renderMainPart()}
-      </VerticalContainer>
+      {renderTabs()}
+      {renderMainPart()}
     </VerticalContainer>
   );
 };

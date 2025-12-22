@@ -5,9 +5,6 @@ import classNames from 'classnames';
 /**
  * Таблица типа grid
  */
-/**
- * Таблица типа grid
- */
 const GridTable = <T,>({
   data,
   cellComponent: CellComponent,
@@ -20,8 +17,10 @@ const GridTable = <T,>({
   rowContentClassName,
   layout = 'scroll',
   wrapColumns = 6,
+  cellWidth,
 }: GridTableProps<T>) => {
   const isWrap = layout === 'wrap';
+  const isFit = layout === 'fit';
 
   const normalizedData = isWrap ? [data.reduce<T[]>((acc, row) => acc.concat(row), [])] : data;
 
@@ -34,6 +33,7 @@ const GridTable = <T,>({
               {getRowTitle(rowIndex, rowData)}
             </div>
           )}
+
           <div
             className={classNames(styles.rowContent, rowContentClassName)}
             style={
@@ -47,14 +47,32 @@ const GridTable = <T,>({
                     maxHeight: 'none',
                     overflowX: 'visible',
                   }
-                : {
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${rowData.length}, 1fr)`,
-                    gap: cellGap,
-                    height: 'auto',
-                    maxHeight: rowContentHeight,
-                    overflowX: 'auto',
-                  }
+                : isFit
+                  ? {
+                      display: 'grid',
+                      gridTemplateColumns: `repeat(${rowData.length}, minmax(0, 1fr))`,
+                      columnGap: cellGap,
+                      height: 'auto',
+                      maxHeight: rowContentHeight,
+                      overflowX: 'hidden', // всё влезает без скролла, просто сплющивается
+                    }
+                  : cellWidth
+                    ? {
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(${rowData.length}, ${cellWidth}px)`,
+                        columnGap: cellGap,
+                        height: 'auto',
+                        maxHeight: rowContentHeight,
+                        overflowX: 'auto',
+                      }
+                    : {
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(${rowData.length}, 1fr)`,
+                        gap: cellGap,
+                        height: 'auto',
+                        maxHeight: rowContentHeight,
+                        overflowX: 'auto',
+                      }
             }
           >
             {rowData.map((cellData, cellIndex) => (

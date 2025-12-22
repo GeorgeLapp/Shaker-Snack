@@ -4,15 +4,22 @@ import {
   CellPriceDTO,
   CellsPricesRowDTO,
   ChangeCellsTypeDTO,
+  DiagnosticsTestDTO,
+  LoadCalibrationDTO,
   MergeCellsDTO,
   OpenProductListDTO,
   Pin,
+  PollCalibrationDTO,
   ProductToCellDTO,
   ProductToRowDTO,
+  RerunDiagnosticsDTO,
+  RunDiagnosticsDTO,
   ServiceMenuAuthorizationDTO,
   ServiceMenuConfigDTO,
   ServiceMenuPricesDTO,
   ServiceMenuProductsDTO,
+  SplitCellsDTO,
+  StartCalibrationDTO,
   TurnOnOffCellsDTO,
 } from '../../../../types/serverInterface/serviceMenuDTO';
 
@@ -38,8 +45,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение конфига ячеек
    */
-  getCellsConfig() {
-    return this.request.post<undefined, ServiceMenuConfigDTO>(
+  async getCellsConfig() {
+    return await this.request.post<undefined, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-config`,
     );
   }
@@ -54,8 +61,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение цен
    */
-  getCellsPrices() {
-    return this.request.post<undefined, ServiceMenuPricesDTO>(
+  async getCellsPrices() {
+    return await this.request.post<undefined, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-prices`,
     );
   }
@@ -63,9 +70,45 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение товаров
    */
-  getCellsProducts() {
-    return this.request.post<undefined, ServiceMenuProductsDTO>(
+  async getCellsProducts() {
+    return await this.request.post<undefined, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/ui/nav/cells-products`,
+    );
+  }
+
+  /**
+   * Получение диагностики ячеек
+   */
+  async getCellsTest() {
+    return await this.request.post<undefined, DiagnosticsTestDTO>(
+      `${serviceMenuBaseUrl}/bff/ui/nav/diagnostics`,
+    );
+  }
+
+  /**
+   * Получение состояния моторов
+   */
+  loadCalibration() {
+    return this.request.post<undefined, LoadCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/load`,
+    );
+  }
+
+  /**
+   * Получение начала калибровки
+   */
+  startCalibration() {
+    return this.request.post<undefined, StartCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/calibration/start`,
+    );
+  }
+
+  /**
+   * Получение состояния калибровки
+   */
+  pollCalibration() {
+    return this.request.post<undefined, PollCalibrationDTO>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/test-cells/calibration/poll`,
     );
   }
 
@@ -73,7 +116,7 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Изменение цены во всем ряду
    */
   changeCellsPricesRow(cellsPricesRow: CellsPricesRowDTO) {
-    return this.request.post<CellsPricesRowDTO, undefined>(
+    return this.request.post<CellsPricesRowDTO, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/cells/price/row`,
       cellsPricesRow,
     );
@@ -83,7 +126,7 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Изменение цены в ячейке
    */
   changeCellPrice(cellPrice: CellPriceDTO) {
-    return this.request.post<CellPriceDTO, undefined>(
+    return this.request.post<CellPriceDTO, ServiceMenuPricesDTO>(
       `${serviceMenuBaseUrl}/bff/cells/price/cell`,
       cellPrice,
     );
@@ -92,8 +135,8 @@ export class ServiceMenuModule extends AbstractApiModule {
   /**
    * Получение списка товаров
    */
-  getOpenProductsList() {
-    return this.request.post<undefined, OpenProductListDTO>(
+  async getOpenProductsList() {
+    return await this.request.post<undefined, OpenProductListDTO>(
       `${serviceMenuBaseUrl}/bff/products/open-list`,
     );
   }
@@ -102,7 +145,7 @@ export class ServiceMenuModule extends AbstractApiModule {
    *  Присвоение товара ячейке
    */
   assignProductToCell(productToCell: ProductToCellDTO) {
-    return this.request.post<ProductToCellDTO, undefined>(
+    return this.request.post<ProductToCellDTO, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/products/assign`,
       productToCell,
     );
@@ -112,7 +155,7 @@ export class ServiceMenuModule extends AbstractApiModule {
    *  Присвоение товара ряду
    */
   assignProductToRow(productToRow: ProductToRowDTO) {
-    return this.request.post<ProductToRowDTO, undefined>(
+    return this.request.post<ProductToRowDTO, ServiceMenuProductsDTO>(
       `${serviceMenuBaseUrl}/bff/products/assign-row`,
       productToRow,
     );
@@ -122,7 +165,7 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Включение/выключение ячеек
    */
   turnOnOffCells(turnOnOffCells: TurnOnOffCellsDTO) {
-    return this.request.post<TurnOnOffCellsDTO, undefined>(
+    return this.request.post<TurnOnOffCellsDTO, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/cells/status`,
       turnOnOffCells,
     );
@@ -132,9 +175,19 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Объединение ячеек
    */
   mergeCells(mergeCells: MergeCellsDTO) {
-    return this.request.post<MergeCellsDTO, undefined>(
+    return this.request.post<MergeCellsDTO, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/cells/merge`,
       mergeCells,
+    );
+  }
+
+  /**
+   * Разъединение ячеек
+   */
+  splitCells(splitCells: SplitCellsDTO) {
+    return this.request.post<SplitCellsDTO, ServiceMenuConfigDTO>(
+      `${serviceMenuBaseUrl}/bff/cells/split`,
+      splitCells,
     );
   }
 
@@ -142,9 +195,29 @@ export class ServiceMenuModule extends AbstractApiModule {
    * Изменение типа ячеек
    */
   changeCellsType(cellsType: ChangeCellsTypeDTO) {
-    return this.request.post<ChangeCellsTypeDTO, undefined>(
+    return this.request.post<ChangeCellsTypeDTO, ServiceMenuConfigDTO>(
       `${serviceMenuBaseUrl}/bff/cells/type`,
       cellsType,
+    );
+  }
+
+  /**
+   * Тест ячеек
+   */
+  runDiagnostics(runDiagnostics: RunDiagnosticsDTO) {
+    return this.request.post<RunDiagnosticsDTO, undefined>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/run`,
+      runDiagnostics,
+    );
+  }
+
+  /**
+   * Перезапуск теста ячеек
+   */
+  rerunDiagnostics(rerunDiagnostics: RerunDiagnosticsDTO) {
+    return this.request.post<RerunDiagnosticsDTO, undefined>(
+      `${serviceMenuBaseUrl}/bff/diagnostics/rerun`,
+      rerunDiagnostics,
     );
   }
 

@@ -1,6 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../../../../app/hooks/store';
-import { getCellsPricesAction } from '../../../../../state/serviceMenu/action';
+import React, { FC, useState } from 'react';
 import HorizontalContainer from '../../../../../components/HorizontalContainer';
 import { Text } from '@consta/uikit/Text';
 import { Button } from '@consta/uikit/Button';
@@ -12,44 +10,55 @@ import styles from './CellsControlPrices.module.scss';
 import { useCellsControlPrices } from './useCellsControlPrices';
 import {
   CellPrice,
+  CellStatusEnum,
   ChangeCellsModeEnum,
 } from '../../../../../types/serverInterface/serviceMenuDTO';
 import ChangeCellsControlPrices from './ChangeCellsControlPrices';
 import Error from '../../../../../components/Error';
+import { IconPowerOff } from '../../../../../assets/icon/iconPowerOff';
 
-const cellGap = 7.2;
+const cellGap = 4;
 const rowGap = 12;
 const rowContentHeight = 222;
+const cellWidth = 100;
 
 /**
  * Управление ячейками: цены
  */
 const CellsControlPrices: FC = () => {
-  const dispatch = useAppDispatch();
-
   const { cellsPricesRows, isRejectCellsPrices } = useCellsControlPrices();
 
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
   const [changeMode, setChangeMode] = useState<ChangeCellsModeEnum | null>(null);
   const [isChangeCellsPricesOpen, setIsChangeCellsPricesOpen] = useState(false);
-
-  useEffect(() => {
-    dispatch(getCellsPricesAction());
-  }, [dispatch]);
+  const [cellRowPrice, setCellRowPrice] = useState<number | null>(null);
 
   // Обработчики
   const handleChangeCellsPricesRowOpen = (rowIndex: number) => {
+    const row = cellsPricesRows[rowIndex] || [];
+
+    let rowPrice: number | null = null;
+
+    if (row.length > 0) {
+      const firstPrice = row[0].price;
+      const allSamePrice = row.every((cell) => cell.price === firstPrice);
+
+      rowPrice = allSamePrice ? firstPrice : null;
+    }
+
     setSelectedRow(rowIndex);
     setSelectedCell(null);
     setChangeMode(ChangeCellsModeEnum.ROW);
+    setCellRowPrice(rowPrice);
     setIsChangeCellsPricesOpen(true);
   };
 
-  const handleChangeCellPriceOpen = (cellId: number) => {
-    setSelectedCell(cellId);
+  const handleChangeCellPriceOpen = (cell: CellPrice) => {
+    setSelectedCell(cell.id);
     setSelectedRow(null);
     setChangeMode(ChangeCellsModeEnum.CELL);
+    setCellRowPrice(cell.price);
     setIsChangeCellsPricesOpen(true);
   };
 
@@ -57,15 +66,16 @@ const CellsControlPrices: FC = () => {
     setSelectedRow(null);
     setSelectedCell(null);
     setChangeMode(null);
+    setCellRowPrice(null);
     setIsChangeCellsPricesOpen(false);
   };
 
   // render методы
   const renderRowTitle = (index: number) => (
     <HorizontalContainer isAutoWidth isAutoSpace>
-      <Text>{index} ряд</Text>
+      <Text>{index} полка</Text>
       <Button
-        label="Изменить цену всех ячеек в ряду"
+        label="Изменить цену всех ячеек в полке"
         size="s"
         view="clear"
         onClick={() => handleChangeCellsPricesRowOpen(index)}
@@ -75,9 +85,13 @@ const CellsControlPrices: FC = () => {
 
   const renderCellNumber = (cell: CellPrice) => (
     <ContentCard className={styles.cellNumberCard}>
-      <Text size="s" weight="semibold" view="system">
-        № {cell.id}
-      </Text>
+      {cell.status === CellStatusEnum.DISABLED ? (
+        <IconPowerOff className={styles.iconPowerOff} />
+      ) : (
+        <Text size="s" weight="semibold" view="system">
+          № {cell.id}
+        </Text>
+      )}
     </ContentCard>
   );
 
@@ -98,10 +112,7 @@ const CellsControlPrices: FC = () => {
   };
 
   const renderCellPrice = (cell: CellPrice) => (
-    <ContentCard
-      className={styles.priceCellCard}
-      onClick={() => handleChangeCellPriceOpen(cell.id)}
-    >
+    <ContentCard className={styles.priceCellCard}>
       <Text size="s" weight="semibold" view="system">
         {cell.price} ₽
       </Text>
@@ -116,7 +127,7 @@ const CellsControlPrices: FC = () => {
   );
 
   const renderCell = ({ data }: GridCellProps<CellPrice>) => (
-    <VerticalContainer space="2xs" isAutoWidth>
+    <VerticalContainer space="2xs" isAutoWidth onClick={() => handleChangeCellPriceOpen(data)}>
       <VerticalContainer space={0}>
         {renderCellNumber(data)}
         {renderCellPlaceholder(data)}
@@ -135,6 +146,7 @@ const CellsControlPrices: FC = () => {
       getRowTitle={renderRowTitle}
       rowGap={rowGap}
       cellGap={cellGap}
+      cellWidth={cellWidth}
     />
   );
 
@@ -143,6 +155,7 @@ const CellsControlPrices: FC = () => {
     changeMode && (
       <ChangeCellsControlPrices
         isOpen={isChangeCellsPricesOpen}
+        cellRowPrice={cellRowPrice}
         row={selectedRow}
         cell={selectedCell}
         mode={changeMode}

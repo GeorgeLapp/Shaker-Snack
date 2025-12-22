@@ -8,11 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './ServiceMenu.module.scss';
 import ContentCard from '../../../components/ContentCard';
 import { IconArrowRight } from '../../../assets/icon/iconArrowRight';
-import { IconWrench } from '@consta/icons/IconWrench';
 import { IconShakerCup } from '../../../assets/icon/iconShakerCup';
-import { IconFilter } from '../../../assets/icon/iconFilter';
 import { IconFavoriteFilled } from '../../../assets/icon/iconFavoriteFilled';
-import { IconDollarCircle } from '../../../assets/icon/iconDollarCircle';
 import { MenuItem } from './types';
 
 /**
@@ -26,9 +23,9 @@ const ServiceMenu: FC = () => {
       title: 'Управление ячейками',
       description: 'Остатки, Глубина, Цены, Товары, Конфигурация ячеек',
       icon: <IconShakerCup size="m" className={styles.icon} />,
-      onClick: () => navigate('/menu/cellControl'),
+      onClick: () => handleCellControlClick(),
     },
-    {
+    /*{
       title: 'Настройки покупки',
       description: 'Уведомления, Учёт остатков, Реклама и др.',
       icon: <IconWrench size="m" className={styles.icon} />,
@@ -45,20 +42,29 @@ const ServiceMenu: FC = () => {
       description: 'Список товаров, Сервер, Устройства, Роли',
       icon: <IconFilter size="m" className={styles.icon} />,
       onClick: () => {},
-    },
+    },*/
     {
       title: 'Диагностика',
       description: 'Тест ячеек, ошибки, Информация, Логи',
       icon: <IconFavoriteFilled size="m" className={styles.icon} />,
-      onClick: () => {},
+      onClick: () => handleDiagnosticsClick(),
     },
-    {
+    /*{
       title: 'Приложение',
       description: 'Файлы приложения, Настройки приложения',
       icon: <IconDollarCircle size="m" className={styles.icon} />,
       onClick: () => {},
-    },
+    },*/
   ];
+
+  // Обработчики
+  function handleCellControlClick() {
+    navigate('/menu/cellControl');
+  }
+
+  function handleDiagnosticsClick() {
+    navigate('/menu/diagnostics');
+  }
 
   // render методы
   const renderHeader = () => (

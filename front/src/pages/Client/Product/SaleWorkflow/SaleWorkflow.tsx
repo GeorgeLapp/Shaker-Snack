@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, ReactNode, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SaleWorkflowProps } from './types';
 import { Modal } from '@consta/uikit/Modal';
@@ -23,6 +23,9 @@ const ERROR_PAYMENT_DESCRIPTION = 'Попробуйте повторно \n' + '
 
 const ERROR_DISPENSE_DESCRIPTION = 'Средства скоро вернутся на карту';
 
+/**
+ * Модальные окна после нажатия кнопки оплатить
+ */
 const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
   const dispatch = useAppDispatch();
 
@@ -90,10 +93,10 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
     description,
     icon,
   }: {
-    title: string;
+    title: string | ReactNode;
     status: 'default' | 'success' | 'error';
-    description: string;
-    icon: React.ReactNode;
+    description: string | ReactNode;
+    icon: ReactNode;
   }) => (
     <VerticalContainer className={styles.content} space="2xl" align="center">
       {icon}
@@ -121,9 +124,20 @@ const SaleWorkflow: FC<SaleWorkflowProps> = ({ cell, onClose }) => {
     switch (workflowSaleStatus) {
       case SaleWorkflowStatus.AwaitingCard:
         return renderContentWrapper({
-          title: 'Приложите карту к терминалу',
+          title: (
+            <>
+              Приложите карту
+              <br />к терминалу
+            </>
+          ),
           status: 'default',
-          description: 'Либо дождитесь появления QR-кода для оплаты СБП',
+          description: (
+            <>
+              Либо дождитесь появления QR-кода
+              <br />
+              для оплаты СБП
+            </>
+          ),
           icon: <IconAwaitingCard className={classNames(styles.icon, styles.defaultIcon)} />,
         });
       case SaleWorkflowStatus.PaymentSuccess:

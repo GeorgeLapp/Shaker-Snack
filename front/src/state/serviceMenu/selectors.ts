@@ -1,6 +1,12 @@
 import { RootState } from '../../app/store';
 
 /**
+ * Селектор выбора вкладки в сервисном меню
+ */
+export const selectCellControlTab = () => (state: RootState) =>
+  state.serviceMenu.selectedCellControlTab;
+
+/**
  * Селектор открытия сервисного меню
  */
 export const selectOpenSettings = () => (state: RootState) => state.serviceMenu.openSettings;
@@ -36,3 +42,8 @@ export const selectChangeCellsProducts = () => (state: RootState) =>
  */
 export const selectOpenProductsList = () => (state: RootState) =>
   state.serviceMenu.openProductsList;
+
+/**
+ * Селектор получения списка ячеек для диагностики
+ */
+export const selectCellsTest = () => (state: RootState) => state.serviceMenu.cellsTest;
