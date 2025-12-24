@@ -55,6 +55,7 @@ const ProductMatrix: FC = () => {
 
   const renderLoading = () => (
     <VerticalContainer className={styles.ProductMatrix} space="m">
+      {renderModal()}
       <ClientHeader renderRightSide={renderRightSide} />
       <Loader />
     </VerticalContainer>
@@ -62,6 +63,7 @@ const ProductMatrix: FC = () => {
 
   const renderError = () => (
     <VerticalContainer className={styles.ProductMatrix} space="m">
+      {renderModal()}
       <ClientHeader renderRightSide={renderRightSide} />
       <Text size="6xl" align="center">
         Ошибка
@@ -71,6 +73,7 @@ const ProductMatrix: FC = () => {
 
   const renderEmpty = () => (
     <VerticalContainer className={styles.ProductMatrix} space="m">
+      {renderModal()}
       <ClientHeader renderRightSide={renderRightSide} />
       <Text size="6xl" align="center">
         Нет продуктов
